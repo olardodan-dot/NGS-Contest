@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NGS Sales Contest Dashboard</title><style>
+:root{--bg:#f2f5fb;--panel:#fff;--ink:#0f1b33;--ink2:#566181;--hair:#dfe5f1;--accent:#2f5bea;--accent-soft:#e8eeff;
+ --navy:#0b1f3a;--A:#1fae6b;--C:#2f80ed;--G:#f2a900;--T:#e5484d;
+ --c0:#1fae6b;--c1:#2f80ed;--c2:#7b61ff;--c3:#f2a900;--c4:#00a3c4;--c5:#e5484d;--warn:#f2a900;--bad:#e5484d;--ok:#1fae6b;}
+*{box-sizing:border-box;} body{margin:0;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+.mono{font-variant-numeric:tabular-nums;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;}
+.wrap{max-width:1120px;margin:0 auto;padding:22px 20px 60px;}
+.top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.top h1{font-size:20px;font-weight:650;margin:0;} .top p{margin:3px 0 0;color:var(--ink2);font-size:13px;}
+.tag{font-size:11px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:4px 9px;border-radius:5px;}
+.filters{background:var(--panel);border:1px solid var(--hair);border-radius:10px;padding:12px 14px;margin:16px 0;}
+.flabel{font-size:11px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);margin-bottom:9px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{border:1px solid var(--hair);background:#fff;color:var(--ink);font-size:13px;font-weight:500;padding:7px 14px;border-radius:20px;cursor:pointer;font-family:inherit;}
+.chip:hover{border-color:var(--accent);color:var(--accent);} .chip.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--hair);margin-bottom:18px;flex-wrap:wrap;}
+.tab{background:none;border:none;font-family:inherit;font-size:14px;font-weight:550;color:var(--ink2);padding:11px 16px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;}
+.tab:hover{color:var(--ink);} .tab.on{color:var(--accent);border-bottom-color:var(--accent);}
+.page{display:none;} .page.on{display:block;animation:fade .25s;} @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
+.kpi{background:var(--panel);border:1px solid var(--hair);border-radius:10px;padding:15px 16px;position:relative;overflow:hidden;}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--A) 0 25%,var(--C) 25% 50%,var(--G) 50% 75%,var(--T) 75%);}
+.kpi .kl{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ink2);}
+.kpi .kv{font-size:26px;font-weight:640;margin-top:6px;} .kpi .ks{font-size:12px;color:var(--ink2);margin-top:3px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.card{background:var(--panel);border:1px solid var(--hair);border-radius:10px;padding:16px 18px;margin-bottom:14px;}
+.card h2{font-size:14px;font-weight:620;margin:0 0 2px;} .card .sub{font-size:12px;color:var(--ink2);margin:0 0 15px;}
+.note{font-size:11px;color:var(--ink2);margin:12px 0 0;padding-top:9px;border-top:1px solid var(--hair);line-height:1.6;}
+.bars{display:flex;flex-direction:column;gap:9px;}
+.brow{display:grid;grid-template-columns:130px 1fr 70px;align-items:center;gap:10px;}
+.bname{font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.btrack{background:#f1f4f6;border-radius:5px;height:20px;overflow:hidden;display:flex;}
+.bfill{height:100%;transition:width .55s cubic-bezier(.4,0,.2,1);background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.22) 0 2px,transparent 2px 9px);}
+.bval{font-size:12.5px;text-align:right;color:var(--ink2);}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;} .legend div{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2);}
+.dot{width:11px;height:11px;border-radius:3px;display:inline-block;}
+table.t{width:100%;border-collapse:collapse;font-size:12.5px;} .t th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2);font-weight:600;padding:7px 8px;border-bottom:1px solid var(--hair);}
+.t td{padding:7px 8px;border-bottom:1px solid #f0f3f5;vertical-align:top;} .t td.n,.t th.n{text-align:right;}
+.rank{display:inline-flex;width:22px;height:22px;border-radius:50%;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:#f1f4f6;}
+.r1{background:#f6d365;} .r2{background:#d9dee3;} .r3{background:#e8c39e;}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.s-Closed{background:#dff3ea;color:#11714f;} .s-In.funnel,.s-Infunnel{background:#e2f1f2;color:#0e7c86;} .s-Lost{background:#fbe3e3;color:#a12b2a;} .s-Notqualified{background:#fdf0dc;color:#9a5d00;}
+.iss{display:inline-block;font-size:10.5px;background:#fdf0dc;color:#9a5d00;border-radius:4px;padding:1px 6px;margin:1px 3px 1px 0;}
+.search{width:100%;padding:8px 12px;border:1px solid var(--hair);border-radius:8px;font-family:inherit;font-size:13px;margin-bottom:12px;}
+.prize{border:2px dashed var(--hair);border-radius:10px;padding:26px;text-align:center;color:var(--ink2);}
+.rules li{margin-bottom:6px;} .muted{color:var(--ink2);}
+/* NGS theme: hero banner with DNA double helix, base-call ticker, sequencing workflow */
+.hero{position:relative;overflow:hidden;border-radius:14px;background:linear-gradient(135deg,#0b1f3a 0%,#14306b 55%,#1d4fb0 100%);color:#fff;padding:22px 24px 18px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 6px 24px rgba(11,31,58,.18);}
+.hero svg#helix{position:absolute;right:-10px;top:0;height:100%;width:58%;opacity:.6;pointer-events:none;}
+.hero-in{position:relative;z-index:1;max-width:640px;}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#7fd3ff;font-weight:700;}
+.hero h1{font-size:25px;margin:6px 0 4px;font-weight:700;letter-spacing:-.01em;}
+.hero p{margin:0;color:#c9d6f2;font-size:13px;}
+.hero .tag{position:relative;z-index:1;background:rgba(255,255,255,.12);color:#fff;align-self:flex-start;border:1px solid rgba(255,255,255,.2);}
+.seq{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.2em;margin-top:12px;white-space:nowrap;overflow:hidden;max-width:620px;-webkit-mask-image:linear-gradient(90deg,#000 70%,transparent);mask-image:linear-gradient(90deg,#000 70%,transparent);}
+.seq span{display:inline-block;animation:scroll 40s linear infinite;} @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.nA{color:#4ade80;} .nC{color:#60a5fa;} .nG{color:#fbbf24;} .nT{color:#f87171;}
+.flow{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap;align-items:center;}
+.flow span{font-size:10.5px;font-weight:650;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);}
+.flow i{color:#7fd3ff;font-style:normal;font-size:12px;}
+.basebar{display:flex;height:4px;border-radius:2px;overflow:hidden;margin:0 0 12px;} .basebar b{flex:1;}
+.card h2::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:8px;vertical-align:1px;background:conic-gradient(var(--A) 0 25%,var(--C) 0 50%,var(--G) 0 75%,var(--T) 0);}
+.foot{margin-top:18px;font-size:11px;color:var(--ink2);text-align:center;}
+@media(max-width:760px){.kpis{grid-template-columns:repeat(2,1fr);} .grid2{grid-template-columns:1fr;} .hero svg#helix{width:100%;opacity:.25;}}
+</style></head><body>
+<div class="wrap">
+ <div class="hero"><svg id="helix" viewBox="0 0 700 150" preserveAspectRatio="none"></svg>
+  <div class="hero-in"><div class="eyebrow">QIAcast &middot; Next-Generation Sequencing</div><h1>NGS Sales Contest &amp; Raffle</h1>
+   <p>QIAGEN North America &middot; Sept 1 2026 &ndash; Jan 1 2027 &middot; data as of <span id="asof"></span></p>
+   <div class="seq" id="seq"></div>
+   <div class="flow"><span>Create</span><i>&#9654;</i><span>Qualify</span><i>&#9654;</i><span>Enter Funnel</span><i>&#9654;</i><span>Close</span><i>&#9654;</i><span>Earn points</span></div></div>
+  <span class="tag">Weekly refresh</span></div>
+ <div class="filters"><div class="flabel">Filter by team</div><div class="chips" id="chips"></div></div>
+ <div class="tabs" id="tabs">
+  <button class="tab on" data-p="0">Team Leaderboard</button><button class="tab" data-p="1">Rep Leaderboard</button>
+  <button class="tab" data-p="2">Points Over Time</button><button class="tab" data-p="3">Opportunities</button>
+  <button class="tab" data-p="4">Opportunity Quality</button><button class="tab" data-p="5">Prizes &amp; Rules</button></div>
+
+ <div class="page on" id="p0"><div class="kpis" id="kpis"></div>
+  <div class="card"><h2>Team standings</h2><p class="sub">Total points by team &middot; entry points + close bonus</p><div class="bars" id="teamBars"></div>
+   <div class="legend"><div><span class="dot" style="background:var(--c0)"></span>Entry points (1 per NGS product)</div><div><span class="dot" style="background:var(--c3)"></span>Close bonus (+4 per closed opp)</div></div></div>
+  <div class="card"><h2>Team detail</h2><p class="sub">Teams = owner's management line &middot; default team names</p><table class="t" id="teamTable"></table></div>
+  <div class="card"><h2>Region roll-up</h2><p class="sub">Teams combined by region</p><div class="bars" id="regionBars"></div></div></div>
+
+ <div class="page" id="p1"><div class="card"><h2>Rep leaderboard</h2><p class="sub">Credit goes to the opportunity owner</p><table class="t" id="repTable"></table></div></div>
+
+ <div class="page" id="p2"><div class="card"><h2>Cumulative points by week</h2><p class="sub">Entry points dated by opportunity creation; close bonus dated by the stage change to closed</p>
+   <div id="chart"></div><div class="legend" id="chartLeg"></div></div>
+  <div class="card"><h2>Points earned per week</h2><p class="sub">All selected teams</p><div class="bars" id="weekBars"></div></div></div>
+
+ <div class="page" id="p3"><div class="card"><h2>NGS opportunities</h2><p class="sub">Every NA opportunity with an NGS (UNGS) product created since Sept 1 &middot; Universe / Above the Funnel earn nothing until moved to Enter the Funnel</p>
+   <input class="search" id="q" placeholder="Search opportunity, account, owner, product..."><table class="t" id="oppTable"></table></div></div>
+
+ <div class="page" id="p4"><div class="grid2">
+   <div class="card"><h2>What makes a good opportunity</h2><p class="sub">Share of opportunities meeting each slide-3 standard</p><div class="bars" id="dqBars"></div>
+    <p class="note">Checks do not change points. Naming: at least Institution_User_Product. Competitive info / notes: competitor fields or opportunity description filled.</p></div>
+   <div class="card"><h2>Quick wins</h2><p class="sub">Opportunities not yet earning points &mdash; move to Enter the Funnel</p><div id="quick"></div></div></div>
+  <div class="card"><h2>Gaps by opportunity</h2><p class="sub">If it's not in Salesforce, it doesn't exist</p><table class="t" id="dqTable"></table></div></div>
+
+ <div class="page" id="p5"><div class="grid2">
+   <div class="card"><h2>Prizes</h2><p class="sub">Team prize: each member of the winning team receives a prize worth ~$250</p>
+    <div class="prize"><b>Prize details &amp; raffle draw</b><br>To be announced</div></div>
+   <div class="card"><h2>How to earn points</h2><p class="sub">Create &rarr; Qualify &rarr; Enter Funnel &rarr; Close &rarr; Earn points</p><ul class="rules" id="rules"></ul></div></div></div>
+</div>
+
+<script>
+const OPPS=[{"name": "TAMU_Berge_QIAseq miRNA 12 Index Kit IL UDI (12)", "account": "Texas A&M University", "owner": "Nathan To", "team": "Pacific 2", "mgr": "Nicole Hardy", "stage": "Order", "status": "Closed", "ngs": 2, "products": "QIAseq miRNA 12 Index Kit IL UDI (12); QIAseq miRNA Library Kit (12)", "entry": 2, "close": 4, "pts": 6, "created": "2026-10-08", "closed_on": "2026-11-05", "close_date": "2026-11-05", "amount": 1846, "cur": "USD", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "TAMU_Miyamoto_QIAseq miRNA Library Kit (12) & Human XpressRef Universal Total RNA", "account": "Texas A&M University", "owner": "Nathan To", "team": "Pacific 2", "mgr": "Nicole Hardy", "stage": "Order", "status": "Closed", "ngs": 1, "products": "QIAseq miRNA Library Kit (12)", "entry": 1, "close": 4, "pts": 5, "created": "2026-09-14", "closed_on": "2026-09-22", "close_date": "2026-09-22", "amount": 1350, "cur": "USD", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "UCMerced_Geekiyanage_Cons", "account": "University of California at Merced (UC Merced)", "owner": "David Mack", "team": "Inside Sales", "mgr": "Lisa Compton", "stage": "Mid Funnel", "status": "In funnel", "ngs": 3, "products": "QIAseq NGS Bead Binding Buffer (10.2ml); QIAseq miRNA 96 Index IL (96); QIAseq miRNA Library Kit (96)", "entry": 3, "close": 0, "pts": 3, "created": "2026-09-10", "closed_on": null, "close_date": "2026-12-10", "amount": 10819, "cur": "USD", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "ADM_Cleto_QIAquick Gel Extraction Kit (250) & QIAseq FX DNA Library UDI Kit (24)", "account": "Archer Daniels Midland", "owner": "David Mack", "team": "Inside Sales", "mgr": "Lisa Compton", "stage": "Mid Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq FX DNA Library UDI Kit (24)", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-10", "closed_on": null, "close_date": "2026-12-10", "amount": 1525, "cur": "USD", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "NeoGenomics_Wong_MRD panel", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Enter the Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq xHYB Custom Human Panel (96) - 1-500", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-11", "closed_on": null, "close_date": "2027-10-29", "amount": 499500, "cur": "USD", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "UTEP_Koculi_QIAseq FastSelect \u2013rRNA Fish Kit (24)", "account": "Chemistry", "owner": "David Mack", "team": "Inside Sales", "mgr": "Lisa Compton", "stage": "Mid Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq FastSelect \u2013rRNA Fish Kit (24)", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-11", "closed_on": null, "close_date": "2026-12-11", "amount": 1385, "cur": "USD", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "NeoGenomics_Danielson_UBA panel Q4'26", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Best Few - Forecastable", "status": "In funnel", "ngs": 1, "products": "QIAseq Multimodal Panel NeoG Custom (96)", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-16", "closed_on": null, "close_date": "2026-12-31", "amount": 2807400, "cur": "USD", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "UofT/CAGEF_Pauline Wang_QIAseq Universal Metagenome Library Kit", "account": "Centre for the Analysis of Genome Evolution and Function (CAGEF)", "owner": "Elisa Kawahara", "team": "Canada", "mgr": "Yass Zia", "stage": "Enter the Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq Universal Metagenome Lib Kit 24", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-25", "closed_on": null, "close_date": "2026-12-31", "amount": 1507, "cur": "CAD", "issues": ["Application", "Next step"]}, {"name": "NeoGenomics_Wong_WGS", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Universe", "status": "Not qualified", "ngs": 1, "products": "QIAseq FX DNA Library UDI-A Kit HT (96)", "entry": 0, "close": 0, "pts": 0, "created": "2026-09-11", "closed_on": null, "close_date": "2028-03-31", "amount": 1000320, "cur": "USD", "issues": ["Stage at Enter Funnel or later", "Application", "Competitive info / notes", "Next step"]}, {"name": "NeoGenomics_Chandramohan_cfDNA Ultra", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Above the Funnel", "status": "Not qualified", "ngs": 1, "products": "QIAseq DNA Ultra Reagent Kit", "entry": 0, "close": 0, "pts": 0, "created": "2026-09-24", "closed_on": null, "close_date": "2027-04-30", "amount": 10000, "cur": "USD", "issues": ["Stage at Enter Funnel or later", "Application", "Competitive info / notes", "Next step"]}, {"name": "CONS_CACAW_MSL-GenomeScienceCentre_Griffith_FastSelectFish", "account": "BC Cancer Agency (BCCRC)", "owner": "Vanessa Collins", "team": "Canada", "mgr": "Yass Zia", "stage": "Above the Funnel", "status": "Not qualified", "ngs": 1, "products": "QIAseq FastSelect \u2013rRNA Fish Kit (96)", "entry": 0, "close": 0, "pts": 0, "created": "2026-09-29", "closed_on": null, "close_date": "2026-11-15", "amount": 47520, "cur": "CAD", "issues": ["Stage at Enter Funnel or later", "Application", "Next step"]}, {"name": "Myriad_Banks_QIAseq FX Q4 2026", "account": "Myriad Genetics", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Above the Funnel", "status": "Not qualified", "ngs": 1, "products": "QIAseq\u2122 FX Components, cus", "entry": 0, "close": 0, "pts": 0, "created": "2026-10-08", "closed_on": null, "close_date": "2026-12-31", "amount": 468000, "cur": "USD", "issues": ["Stage at Enter Funnel or later", "Application", "Competitive info / notes", "Next step"]}, {"name": "TAMU_Berge_QIAseq miRNA 96 Index Kit IL UDI-A (96)", "account": "Texas A&M University", "owner": "Nathan To", "team": "Pacific 2", "mgr": "Nicole Hardy", "stage": "Lost", "status": "Lost", "ngs": 2, "products": "QIAseq miRNA 96 Index Kit IL UDI-A (96); QIAseq miRNA Library Kit (96)", "entry": 0, "close": 0, "pts": 0, "created": "2026-10-09", "closed_on": null, "close_date": "2027-01-09", "amount": 9957, "cur": "USD", "issues": ["Application", "Competitive info / notes", "Next step"]}];
+const META={"as_of": "2026-11-06", "start": "2026-09-01", "end": "2026-12-31", "teams": ["Atlantic 1", "Atlantic 2", "Pacific 1", "Pacific 2", "Biopharma East", "Biopharma West", "Inside Sales", "Canada", "Key Accounts"], "region": {"Atlantic 1": "Atlantic", "Atlantic 2": "Atlantic", "Pacific 1": "Pacific", "Pacific 2": "Pacific", "Biopharma East": "Biopharma", "Biopharma West": "Biopharma", "Inside Sales": "Inside Sales", "Canada": "Canada", "Key Accounts": "Key Accounts"}, "lead": {"Atlantic 1": "Jared Sandoval", "Atlantic 2": "John Grebenc", "Pacific 1": "Louise Monte", "Pacific 2": "Nicole Hardy", "Biopharma East": "Jeffrey Durocher", "Biopharma West": "Patrick Bronson-Doherty", "Inside Sales": "Lisa Compton", "Canada": "Yass Zia", "Key Accounts": "Deborah Roney"}, "checks": ["Stage at Enter Funnel or later", "Naming convention", "Opportunity value", "Application", "Competitive info / notes", "Next step", "Close date not in the past"], "excluded": 3, "pts_line": 1, "pts_close": 4, "closed_stages": ["Order", "Won", "Order Partially Won", "PO received"]};
+
+const COLORS=['#1fae6b','#7fd8a8','#2f80ed','#9cc2f7','#f2a900','#f7d27a','#e5484d','#7b61ff','#00a3c4'];
+// DNA double helix (complementary base pairs A-T, C-G) + scrolling base-call ticker for the header
+function helix(){const W=700,H=150,amp=50,n=28,NT={A:'#4ade80',C:'#60a5fa',G:'#fbbf24',T:'#f87171'},CP={A:'T',T:'A',C:'G',G:'C'},B='ACGT';
+ let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};let g='',p1='',p2='';
+ for(let i=0;i<=200;i++){const x=i*W/200,a=amp*Math.sin(i/200*Math.PI*4);p1+=(i?'L':'M')+x.toFixed(1)+','+(H/2+a).toFixed(1);p2+=(i?'L':'M')+x.toFixed(1)+','+(H/2-a).toFixed(1);}
+ for(let k=0;k<n;k++){const t=(k+.5)/n,x=t*W,a=amp*Math.sin(t*Math.PI*4),b=B[Math.floor(rnd()*4)];
+  g+=`<line x1="${x}" y1="${H/2+a}" x2="${x}" y2="${H/2}" stroke="${NT[b]}" stroke-width="4" stroke-linecap="round"/><line x1="${x}" y1="${H/2}" x2="${x}" y2="${H/2-a}" stroke="${NT[CP[b]]}" stroke-width="4" stroke-linecap="round"/>`;}
+ document.getElementById('helix').innerHTML=g+`<path d="${p1}" fill="none" stroke="#b9d7ff" stroke-width="3"/><path d="${p2}" fill="none" stroke="#7fd3ff" stroke-width="3"/>`;
+ let s='';for(let i=0;i<90;i++){const b=B[Math.floor(rnd()*4)];s+=`<b class="n${b}">${b}</b>`;}
+ document.getElementById('seq').innerHTML=`<span>${s}${s}</span>`;}
+const TCOL={}; META.teams.forEach((t,i)=>TCOL[t]=COLORS[i%COLORS.length]);
+let sel='All';
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=n=>(n||0).toLocaleString('en-US');
+const cur=()=>OPPS.filter(o=>sel==='All'||o.team===sel);
+const sum=(a,f)=>a.reduce((s,o)=>s+f(o),0);
+function groupBy(a,k){const m={};a.forEach(o=>{(m[o[k]]=m[o[k]]||[]).push(o);});return m;}
+function rankCell(i){return `<span class="rank ${i<3?'r'+(i+1):''}">${i+1}</span>`;}
+function pill(s){return `<span class="pill s-${s.replace(/ /g,'')}">${esc(s)}</span>`;}
+
+function chips(){const el=document.getElementById('chips');el.innerHTML=['All',...META.teams].map(t=>`<button class="chip ${t===sel?'on':''}" data-t="${esc(t)}">${t==='All'?'All teams':esc(t)}</button>`).join('');
+ el.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{sel=b.dataset.t;render();});}
+
+function teamRows(){return META.teams.map(t=>{const a=OPPS.filter(o=>o.team===t);
+ return {team:t,region:META.region[t],lead:META.lead[t],pts:sum(a,o=>o.pts),entry:sum(a,o=>o.entry),close:sum(a,o=>o.close),opps:a.length,
+  scoring:a.filter(o=>o.pts>0).length,closed:a.filter(o=>o.status==='Closed').length,reps:new Set(a.map(o=>o.owner)).size};})
+ .sort((x,y)=>y.pts-x.pts||y.closed-x.closed);}
+
+function kpis(){const a=cur();const k=[
+ ['Total points',fmt(sum(a,o=>o.pts)),`${fmt(sum(a,o=>o.entry))} entry + ${fmt(sum(a,o=>o.close))} close bonus`],
+ ['NGS opportunities',fmt(a.length),`${a.filter(o=>o.pts>0).length} earning points`],
+ ['Closed',fmt(a.filter(o=>o.status==='Closed').length),'Order, Won, Partially Won, PO received'],
+ ['Reps on the board',fmt(new Set(a.filter(o=>o.pts>0).map(o=>o.owner)).size),`of ${new Set(a.map(o=>o.owner)).size} with NGS opps`]];
+ document.getElementById('kpis').innerHTML=k.map(x=>`<div class="kpi"><div class="kl">${x[0]}</div><div class="kv mono">${x[1]}</div><div class="ks">${x[2]}</div></div>`).join('');}
+
+function teams(){const r=teamRows();const mx=Math.max(1,...r.map(x=>x.pts));
+ document.getElementById('teamBars').innerHTML=r.map(x=>`<div class="brow" style="opacity:${sel==='All'||sel===x.team?1:.35}"><div class="bname">${esc(x.team)}</div>
+  <div class="btrack"><div class="bfill" style="width:${100*x.entry/mx}%;background:var(--c0)"></div><div class="bfill" style="width:${100*x.close/mx}%;background:var(--c3)"></div></div>
+  <div class="bval mono">${fmt(x.pts)} pts</div></div>`).join('');
+ const rg={};r.forEach(x=>{rg[x.region]=(rg[x.region]||0)+x.pts;});const rr=Object.entries(rg).sort((a,b)=>b[1]-a[1]);const m3=Math.max(1,...rr.map(x=>x[1]));
+ document.getElementById('regionBars').innerHTML=rr.map(([k,v])=>`<div class="brow" style="opacity:${sel==='All'||META.region[sel]===k?1:.35}"><div class="bname">${esc(k)}</div><div class="btrack"><div class="bfill" style="width:${100*v/m3}%;background:var(--accent)"></div></div><div class="bval mono">${fmt(v)} pts</div></div>`).join('');
+ document.getElementById('teamTable').innerHTML=`<tr><th>#</th><th>Team</th><th>Region</th><th>Team lead</th><th class="n">Points</th><th class="n">Entry</th><th class="n">Close bonus</th><th class="n">NGS opps</th><th class="n">Closed</th><th class="n">Reps</th></tr>`+
+  r.map((x,i)=>`<tr style="opacity:${sel==='All'||sel===x.team?1:.35}"><td>${rankCell(i)}</td><td>${esc(x.team)}</td><td>${esc(x.region)}</td><td>${esc(x.lead)}</td><td class="n mono"><b>${fmt(x.pts)}</b></td><td class="n mono">${x.entry}</td><td class="n mono">${x.close}</td><td class="n mono">${x.opps}</td><td class="n mono">${x.closed}</td><td class="n mono">${x.reps}</td></tr>`).join('');}
+
+function reps(){const g=groupBy(cur(),'owner');const r=Object.entries(g).map(([k,a])=>({owner:k,team:a[0].team,pts:sum(a,o=>o.pts),entry:sum(a,o=>o.entry),close:sum(a,o=>o.close),
+  opps:a.length,closed:a.filter(o=>o.status==='Closed').length,ngs:sum(a,o=>o.ngs)})).sort((x,y)=>y.pts-x.pts||y.closed-x.closed);
+ document.getElementById('repTable').innerHTML=`<tr><th>#</th><th>Rep</th><th>Team</th><th class="n">Points</th><th class="n">Entry</th><th class="n">Close bonus</th><th class="n">NGS opps</th><th class="n">NGS products</th><th class="n">Closed</th></tr>`+
+  (r.length?r.map((x,i)=>`<tr><td>${rankCell(i)}</td><td>${esc(x.owner)}</td><td>${esc(x.team)}</td><td class="n mono"><b>${x.pts}</b></td><td class="n mono">${x.entry}</td><td class="n mono">${x.close}</td><td class="n mono">${x.opps}</td><td class="n mono">${x.ngs}</td><td class="n mono">${x.closed}</td></tr>`).join('')
+  :`<tr><td colspan="9" class="muted">No NGS opportunities yet for this team.</td></tr>`);}
+
+function weeks(){const s=new Date(META.start+'T00:00:00'),e=new Date(Math.min(new Date(META.as_of+'T00:00:00'),new Date(META.end+'T00:00:00')));const w=[];
+ for(let d=new Date(s);d<=e;d.setDate(d.getDate()+7))w.push(new Date(d));return w;}
+function wk(ds,W){if(!ds)return -1;const d=new Date(ds+'T00:00:00');let i=-1;W.forEach((w,j)=>{if(d>=w)i=j;});return i;}
+function timeline(){const W=weeks();const teamsShown=sel==='All'?META.teams:[sel];
+ const series=teamsShown.map(t=>{const v=new Array(W.length).fill(0);OPPS.filter(o=>o.team===t).forEach(o=>{const a=wk(o.created,W);if(a>=0)v[a]+=o.entry;const b=wk(o.closed_on,W);if(b>=0&&o.close)v[b]+=o.close;});
+  let c=0;return {t,weekly:v,cum:v.map(x=>c+=x)};});
+ const H=240,Wd=1040,pl=34,pb=26,mx=Math.max(1,...series.flatMap(s=>s.cum));const x=i=>pl+(W.length<2?0:i*(Wd-pl-10)/(W.length-1)),y=v=>H-pb-(v/mx)*(H-pb-10);
+ let svg=`<svg viewBox="0 0 ${Wd} ${H}" width="100%" style="display:block">`;
+ for(let g=0;g<=4;g++){const v=Math.round(mx*g/4);svg+=`<line x1="${pl}" x2="${Wd-10}" y1="${y(v)}" y2="${y(v)}" stroke="#eef1f4"/><text x="${pl-6}" y="${y(v)+4}" font-size="10" text-anchor="end" fill="#5b6875">${v}</text>`;}
+ W.forEach((w,i)=>{if(i%2===0||W.length<10)svg+=`<text x="${x(i)}" y="${H-8}" font-size="10" text-anchor="middle" fill="#5b6875">${w.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</text>`;});
+ series.forEach(s=>{svg+=`<polyline fill="none" stroke="${TCOL[s.t]}" stroke-width="2.5" points="${s.cum.map((v,i)=>x(i)+','+y(v)).join(' ')}"/>`;
+  s.cum.forEach((v,i)=>{svg+=`<circle cx="${x(i)}" cy="${y(v)}" r="3" fill="${TCOL[s.t]}"><title>${esc(s.t)} &middot; week of ${W[i].toLocaleDateString('en-US')}: ${v} pts</title></circle>`;});});
+ document.getElementById('chart').innerHTML=svg+'</svg>';
+ document.getElementById('chartLeg').innerHTML=series.map(s=>`<div><span class="dot" style="background:${TCOL[s.t]}"></span>${esc(s.t)} (${s.cum[s.cum.length-1]||0})</div>`).join('');
+ const tot=W.map((_,i)=>sum(series,s=>s.weekly[i]));const m2=Math.max(1,...tot);
+ document.getElementById('weekBars').innerHTML=W.map((w,i)=>`<div class="brow"><div class="bname">Week of ${w.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div><div class="btrack"><div class="bfill" style="width:${100*tot[i]/m2}%;background:var(--accent)"></div></div><div class="bval mono">${tot[i]} pts</div></div>`).join('');}
+
+function opps(){const q=(document.getElementById('q').value||'').toLowerCase();
+ const a=cur().filter(o=>!q||[o.name,o.account,o.owner,o.products,o.stage].join(' ').toLowerCase().includes(q));
+ document.getElementById('oppTable').innerHTML=`<tr><th>Opportunity</th><th>Owner / team</th><th>Stage</th><th class="n">NGS products</th><th class="n">Points</th><th>Created</th><th>Close date</th></tr>`+
+  (a.length?a.map(o=>`<tr><td><b>${esc(o.name)}</b><div class="muted" style="font-size:11.5px">${esc(o.account)}</div><div class="muted" style="font-size:11px">${esc(o.products)}</div></td>
+   <td>${esc(o.owner)}<div class="muted" style="font-size:11.5px">${esc(o.team)}</div></td><td>${pill(o.status)}<div class="muted" style="font-size:11.5px">${esc(o.stage)}</div></td>
+   <td class="n mono">${o.ngs}</td><td class="n mono"><b>${o.pts}</b><div class="muted" style="font-size:11px">${o.entry}+${o.close}</div></td><td class="mono">${o.created||''}</td><td class="mono">${o.close_date||''}</td></tr>`).join('')
+  :`<tr><td colspan="7" class="muted">No matching opportunities.</td></tr>`);}
+
+function dq(){const a=cur();const n=Math.max(1,a.length);
+ document.getElementById('dqBars').innerHTML=META.checks.map(c=>{const p=a.length?Math.round(100*a.filter(o=>!o.issues.includes(c)).length/n):0;
+  const col=p>=80?'var(--ok)':p>=50?'var(--warn)':'var(--bad)';return `<div class="brow"><div class="bname" title="${esc(c)}">${esc(c)}</div><div class="btrack"><div class="bfill" style="width:${p}%;background:${col}"></div></div><div class="bval mono">${p}%</div></div>`;}).join('');
+ const qw=a.filter(o=>o.status==='Not qualified');
+ document.getElementById('quick').innerHTML=qw.length?`<table class="t"><tr><th>Opportunity</th><th>Owner</th><th class="n">Pts available</th></tr>`+qw.map(o=>`<tr><td>${esc(o.name)}<div class="muted" style="font-size:11px">${esc(o.stage)}</div></td><td>${esc(o.owner)}</td><td class="n mono">+${o.ngs}</td></tr>`).join('')+'</table>':'<p class="muted">None &mdash; every opportunity is in the funnel.</p>';
+ const g=a.filter(o=>o.issues.length).sort((x,y)=>y.issues.length-x.issues.length);
+ document.getElementById('dqTable').innerHTML=`<tr><th>Opportunity</th><th>Owner</th><th>Stage</th><th>Missing / to fix</th></tr>`+
+  (g.length?g.map(o=>`<tr><td>${esc(o.name)}</td><td>${esc(o.owner)}</td><td>${esc(o.stage)}</td><td>${o.issues.map(i=>`<span class="iss">${esc(i)}</span>`).join('')}</td></tr>`).join(''):`<tr><td colspan="4" class="muted">No gaps found.</td></tr>`);}
+
+function rules(){document.getElementById('rules').innerHTML=[
+ `<b>${META.pts_line} point per NGS product</b> (budget line UNGS) on an opportunity at <b>Enter the Funnel</b> or later. Universe and Above the Funnel do not count.`,
+ `<b>+${META.pts_close} points</b> (flat) when the opportunity closes: ${META.closed_stages.join(', ')}.`,
+ `Put multiple NGS products in the same opportunity &mdash; each product earns a point. Quantity does not matter.`,
+ `Lost opportunities earn no points. Credit goes to the opportunity owner; teams follow the owner's management line.`,
+ `First pass counts NA opportunities <b>created on or after Sept 1, 2026</b>. The source of the lead does not matter.`,
+ `If it's not in Salesforce, it doesn't exist. All decisions are final and at the discretion of Commercial Ops.`].map(x=>`<li>${x}</li>`).join('');}
+
+function render(){chips();kpis();teams();reps();timeline();opps();dq();}
+document.getElementById('asof').textContent=new Date(META.as_of+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById('p'+b.dataset.p).classList.add('on');});
+document.getElementById('q').oninput=opps; helix(); rules(); render();
+
+</script></body></html>
