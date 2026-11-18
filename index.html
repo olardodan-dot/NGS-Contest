@@ -1,152 +1,202 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NGS Sales Contest &amp; Raffle</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg1:#140a33;--bg2:#0a1f44;--card:rgba(255,255,255,.06);--line:rgba(255,255,255,.13);--ink:#f4f6ff;--ink2:#aab3d6;
- --A:#22e39a;--C:#3fa9ff;--G:#ffc93c;--T:#ff5d73;--P:#9b5cff;--K:#ff4fd8;--gold:#ffd84d;--silver:#d9e2ec;--bronze:#e7a46b;}
+:root{
+ --q-navy:#002f6c;   /* QIAGEN dark blue (header, headings) */
+ --q-blue:#0063b2;   /* QIAGEN primary blue (accents, active states) */
+ --q-sky:#00a3e0;    /* light blue (secondary accent) */
+ --q-green:#6cb33f;  /* positive / closed */
+ --bg:#f4f7fb;--card:#ffffff;--card2:#f7f9fc;--line:#dde5ef;--ink:#13233a;--ink2:#5a6b82;--ink3:#8a9bb0;--trk:#e8eef6;
+ --gold:#c9a227;--silver:#9aa7b8;--bronze:#b57a4a;--ok:#4c9a2a;--warn:#d98a00;--bad:#c8102e;
+ --A:#6cb33f;--C:#0063b2;--G:#00a3e0;--T:#002f6c;}   /* sequencing-read colors drawn from the QIAGEN palette */
 *{box-sizing:border-box;}
-body{margin:0;color:var(--ink);font:14px/1.5 Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh;
- background:radial-gradient(1100px 600px at 8% -10%,#3b1a8a 0%,transparent 60%),radial-gradient(900px 520px at 110% 8%,#0f5f8f 0%,transparent 55%),linear-gradient(160deg,var(--bg1),var(--bg2));background-attachment:fixed;}
-h1,h2,h3{font-family:Fredoka,"Segoe UI Rounded",Inter,sans-serif;}
-.wrap{max-width:1160px;margin:0 auto;padding:20px 18px 70px;}
-canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:50;}
-.hero{position:relative;overflow:hidden;border-radius:22px;padding:26px 28px 18px;border:1px solid var(--line);box-shadow:0 20px 60px rgba(0,0,0,.35);
- background:linear-gradient(120deg,rgba(155,92,255,.40),rgba(63,169,255,.25) 50%,rgba(34,227,154,.22));}
-.hero .helix{position:absolute;inset:0;opacity:.33;pointer-events:none;overflow:hidden;}
-.hero .helix svg{width:200%;height:100%;animation:drift 32s linear infinite;}
+body{margin:0;color:var(--ink);font:14px/1.55 Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);}
+.num{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;}
+h1,h2,h3{letter-spacing:-.015em;}
+.ic{width:16px;height:16px;flex:0 0 auto;}
+.wrap{max-width:1160px;margin:0 auto;padding:24px 20px 70px;}
+.hero{position:relative;overflow:hidden;border-radius:16px;padding:26px 28px 0;color:#fff;background:linear-gradient(120deg,var(--q-navy) 0%,var(--q-blue) 70%,#0a7cc4 100%);box-shadow:0 8px 28px rgba(0,47,108,.18);}
+.hero .helix{position:absolute;left:0;right:0;top:0;bottom:48px;opacity:.16;pointer-events:none;overflow:hidden;z-index:0;}
+.hero .helix svg{width:200%;height:100%;animation:drift 60s linear infinite;}
 @keyframes drift{to{transform:translateX(-50%);}}
-.hero-row{position:relative;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:flex-start;}
-.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:#9ff3d0;}
-.hero h1{font-size:42px;line-height:1.05;margin:6px 0 8px;background:linear-gradient(90deg,#fff,#c9f7ff 45%,#ffe58a);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.tagline{color:#e6ebff;font-size:15.5px;margin:0;} .asof{color:var(--ink2);font-size:12px;margin-top:8px;}
-.countdown{position:relative;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:18px;padding:12px 20px;text-align:center;min-width:150px;}
-.countdown .n{font-family:Fredoka,Inter,sans-serif;font-size:46px;font-weight:700;line-height:1;color:var(--G);text-shadow:0 0 18px rgba(255,201,60,.55);}
-.countdown .l{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);}
-.ticker{position:relative;margin-top:16px;overflow:hidden;white-space:nowrap;border-top:1px dashed var(--line);padding-top:10px;
- -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);}
-.ticker .track{display:inline-block;animation:tick 50s linear infinite;} .ticker .ev{display:inline-block;margin-right:36px;font-size:13px;color:#e8ecff;} .ticker .ev b{color:var(--A);}
+.hero-row{position:relative;z-index:1;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:flex-start;}
+.eyebrow{font:600 11px "IBM Plex Mono",monospace;letter-spacing:.18em;text-transform:uppercase;color:#9fdcf5;}
+.hero h1{font-size:34px;font-weight:700;line-height:1.1;margin:8px 0 6px;color:#fff;}
+.tagline{color:#dbe8f7;font-size:15px;margin:0;max-width:640px;} .asof{color:#b7cbe6;font-size:12px;margin-top:10px;}
+.countdown{position:relative;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:12px 22px;text-align:center;min-width:140px;}
+.countdown .n{font:600 40px "IBM Plex Mono",monospace;line-height:1;color:#fff;}
+.countdown .l{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#cfe0f3;margin-top:6px;}
+.sb{position:relative;z-index:1;display:flex;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap;}
+.sblbl{font:600 10.5px "IBM Plex Mono",monospace;letter-spacing:.16em;color:#9fdcf5;text-transform:uppercase;margin-right:4px;}
+.sbi{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:7px 14px;}
+.sbi.lead{background:rgba(255,255,255,.18);border-color:rgba(242,183,5,.75);}
+.sbi .pos{font:600 11px "IBM Plex Mono",monospace;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.2);}
+.sbi.lead .pos{background:#f2b705;color:var(--q-navy);}
+.sbn{font-weight:600;font-size:13.5px;} .sbp{font-size:20px;font-weight:600;}
+.sbgap{font-size:12px;color:#cfe0f3;margin-left:4px;}
+.ticker{position:relative;z-index:1;margin:16px -28px 0;overflow:hidden;white-space:nowrap;background:rgba(0,24,60,.55);border-top:1px solid rgba(255,255,255,.15);padding:11px 28px;
+ -webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);}
+.ticker .track{display:inline-block;animation:tick 90s linear infinite;} .ticker:hover .track{animation-play-state:paused;}
+.ticker .ev{display:inline-block;margin-right:48px;font:500 13px Inter,sans-serif;color:#e6effa;}
+.ticker .ev b{color:#fff;font-weight:600;} .ticker .ev .plus{color:#9fdcf5;font-weight:600;}
+.ticker .dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:8px;vertical-align:1px;box-shadow:0 0 0 2px rgba(255,255,255,.35);}
 @keyframes tick{to{transform:translateX(-50%);}}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 10px;}
-.chip{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink);font:600 13px Inter,sans-serif;padding:8px 15px;border-radius:999px;cursor:pointer;transition:.15s;}
-.chip:hover{transform:translateY(-1px);border-color:#fff;} .chip.on{background:linear-gradient(90deg,var(--P),var(--C));border-color:transparent;box-shadow:0 6px 18px rgba(155,92,255,.45);}
-.sw{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 18px;background:rgba(0,0,0,.25);padding:6px;border-radius:16px;border:1px solid var(--line);}
-.tab{flex:1;min-width:120px;background:none;border:none;color:var(--ink2);font:600 14px Fredoka,Inter,sans-serif;padding:10px 12px;border-radius:12px;cursor:pointer;transition:.15s;}
-.tab:hover{color:#fff;background:rgba(255,255,255,.07);} .tab.on{color:#14082e;background:linear-gradient(90deg,var(--A),var(--G));box-shadow:0 6px 18px rgba(34,227,154,.35);}
-.page{display:none;} .page.on{display:block;animation:pop .35s ease;} @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.99);}to{opacity:1;transform:none;}}
+.basebar{position:relative;display:flex;height:3px;margin:0 -28px;} .basebar i{flex:1;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 6px;}
+.chip{border:1px solid var(--line);background:#fff;color:var(--ink2);font:500 12.5px Inter,sans-serif;padding:6px 12px;border-radius:8px;cursor:pointer;transition:.15s;}
+.chip:hover{color:var(--q-blue);border-color:var(--q-blue);} .chip.on{background:var(--q-blue);color:#fff;border-color:var(--q-blue);}
+.sw{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:0;} .chip.on .sw{box-shadow:0 0 0 2px #fff;}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:10px 0 20px;flex-wrap:wrap;}
+.tab{display:flex;align-items:center;gap:7px;background:none;border:none;color:var(--ink2);font:600 13.5px Inter,sans-serif;padding:12px 14px;border-bottom:3px solid transparent;margin-bottom:-1px;cursor:pointer;transition:.15s;}
+.tab:hover{color:var(--q-navy);} .tab.on{color:var(--q-navy);border-bottom-color:var(--q-blue);} .tab .ic{color:var(--q-blue);}
+.page{display:none;} .page.on{display:block;animation:fade .3s ease;} @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
-.kpi{border-radius:18px;padding:16px 18px;background:var(--card);border:1px solid var(--line);position:relative;overflow:hidden;}
-.kpi .ic{font-size:24px;} .kpi .kv{font:700 36px Fredoka,Inter,sans-serif;margin-top:2px;line-height:1.1;} .kpi .kl{font-size:11.5px;color:var(--ink2);text-transform:uppercase;letter-spacing:.08em;font-weight:700;}
-.kpi::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:var(--glow);filter:blur(10px);}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px 20px;margin-bottom:16px;}
-.card h2{font-size:21px;margin:0 0 2px;} .card .sub{color:var(--ink2);font-size:13px;margin:0 0 16px;}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;box-shadow:0 1px 2px rgba(19,35,58,.04);}
+.kpi::before{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:var(--kc);}
+.kpi .kl{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);} .kpi .kl .ic{color:var(--q-blue);}
+.kpi .kv{font:600 32px "IBM Plex Mono",monospace;margin-top:6px;color:var(--q-navy);line-height:1.1;} .kpi .ks{font-size:12px;color:var(--ink3);margin-top:4px;} .kpi .ks b{color:var(--ok);}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px;box-shadow:0 1px 2px rgba(19,35,58,.04);}
+.card h2{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:650;margin:0 0 2px;color:var(--q-navy);} .card h2 .ic{width:18px;height:18px;color:var(--q-blue);}
+.card .sub{color:var(--ink2);font-size:12.5px;margin:0 0 16px;}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-.leader{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:14px;margin-bottom:14px;font-size:15px;
- background:linear-gradient(90deg,rgba(255,216,77,.20),rgba(255,216,77,0));border:1px solid rgba(255,216,77,.35);} .leader .crown{font-size:28px;}
-.lane{display:grid;grid-template-columns:40px 160px 1fr 74px;gap:12px;align-items:center;padding:9px 0;border-bottom:1px dashed rgba(255,255,255,.08);transition:opacity .2s;}
-.medal{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:700 14px Fredoka,Inter,sans-serif;background:rgba(255,255,255,.08);}
-.m1{background:radial-gradient(circle at 30% 30%,#fff6c2,var(--gold));color:#5a4300;box-shadow:0 0 16px rgba(255,216,77,.6);}
-.m2{background:radial-gradient(circle at 30% 30%,#fff,var(--silver));color:#34404d;} .m3{background:radial-gradient(circle at 30% 30%,#ffe2c7,var(--bronze));color:#5a2e0b;}
-.lname{font-weight:700;} .lname small{display:block;color:var(--ink2);font-weight:500;font-size:11.5px;}
-.track{position:relative;height:34px;border-radius:999px;border:1px solid rgba(255,255,255,.08);
- background:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 14px,rgba(255,255,255,.02) 14px 28px);}
-.trail{position:absolute;left:0;top:0;bottom:0;border-radius:999px;width:0;transition:width 1.3s cubic-bezier(.2,.8,.2,1);}
-.runner{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:19px;
- background:#fff;box-shadow:0 0 0 3px var(--rc),0 0 20px var(--rc);transition:left 1.3s cubic-bezier(.2,.8,.2,1);z-index:2;}
-.flag{position:absolute;right:-8px;top:-10px;font-size:18px;}
-.lpts{font:700 22px Fredoka,Inter,sans-serif;text-align:right;line-height:1.1;} .lpts small{display:block;font:500 11px Inter,sans-serif;color:var(--ink2);}
-.podium{display:flex;justify-content:center;align-items:flex-end;gap:16px;margin:8px 0 4px;min-height:280px;}
-.pod{width:190px;text-align:center;} .pod .av{width:66px;height:66px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font:700 22px Fredoka,Inter,sans-serif;color:#14082e;box-shadow:0 0 22px rgba(255,255,255,.25);}
-.pod .nm{font-weight:700;font-size:15px;} .pod .tm{font-size:12px;color:var(--ink2);}
-.pod .blk{margin-top:10px;border-radius:14px 14px 4px 4px;display:flex;flex-direction:column;align-items:center;padding-top:12px;font:700 30px Fredoka,Inter,sans-serif;color:#14082e;height:0;overflow:hidden;transition:height 1.1s cubic-bezier(.2,.8,.2,1);}
-.pod .blk small{font:700 11px Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;}
-.p1 .blk{background:linear-gradient(180deg,#fff2a8,var(--gold));} .p2 .blk{background:linear-gradient(180deg,#fff,var(--silver));} .p3 .blk{background:linear-gradient(180deg,#ffe2c7,var(--bronze));}
-.badges{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:6px;}
-.bdg{display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid var(--line);white-space:nowrap;margin:1px 0;}
+.leader{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-left:4px solid var(--gold);background:linear-gradient(90deg,rgba(201,162,39,.10),rgba(201,162,39,0) 60%),#fff;
+ padding:12px 16px;border-radius:10px;margin-bottom:16px;font-size:14px;color:var(--ink);} .leader b{color:var(--q-navy);}
+.ltag{font:600 10.5px "IBM Plex Mono",monospace;letter-spacing:.14em;color:#8a6d0f;background:rgba(201,162,39,.14);border:1px solid rgba(201,162,39,.45);border-radius:6px;padding:3px 8px;white-space:nowrap;}
+.stories{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
+.story{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:0 1px 2px rgba(19,35,58,.04);transition:.2s;}
+.story:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,47,108,.10);border-color:#c5d5e8;}
+.story::after{content:"";position:absolute;right:-22px;bottom:-22px;width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,rgba(0,163,224,.14),transparent 70%);}
+.story .k{display:flex;align-items:center;gap:8px;font:600 10.5px "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--q-blue);}
+.story p{position:relative;margin:8px 0 0;font-size:13.5px;line-height:1.45;color:var(--ink);} .story p b{color:var(--q-navy);}
+.lane{display:grid;grid-template-columns:36px 200px 1fr 110px;gap:14px;align-items:center;padding:22px 0 12px;border-bottom:1px solid var(--line);transition:opacity .2s;}
+.lane:last-child{border-bottom:none;}
+.medal{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:600 12px "IBM Plex Mono",monospace;color:var(--ink2);border:1px solid var(--line);background:#fff;}
+.m1{color:#fff;background:var(--gold);border-color:var(--gold);} .m2{color:#fff;background:var(--silver);border-color:var(--silver);} .m3{color:#fff;background:var(--bronze);border-color:var(--bronze);}
+.lname{position:relative;font-weight:600;color:var(--q-navy);cursor:default;} .lname small{display:block;color:var(--ink3);font-weight:500;font-size:11.5px;}
+.pop{display:none;position:absolute;left:0;top:100%;margin-top:8px;z-index:20;min-width:260px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 28px rgba(19,35,58,.16);padding:10px 12px;font-weight:400;}
+.lane:hover .pop{display:block;} .pop .ph{font:600 10.5px "IBM Plex Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin-bottom:4px;}
+.pop .pr{display:flex;justify-content:space-between;gap:12px;font-size:12.5px;color:var(--ink);padding:5px 0;border-top:1px solid var(--line);} .pop .pr span:last-child{font-family:"IBM Plex Mono",monospace;color:var(--q-navy);}
+.mv{display:inline-block;font:600 10.5px "IBM Plex Mono",monospace;padding:1px 6px;border-radius:5px;margin-left:6px;vertical-align:1px;white-space:nowrap;}
+.mv.up{background:#e6f4dc;color:#3d7f21;} .mv.dn{background:#fbe7ea;color:var(--bad);} .mv.eq{background:#eef2f7;color:var(--ink3);} .mv.new{background:#e5f0fa;color:var(--q-blue);}
+.track{position:relative;height:10px;border-radius:999px;background:var(--trk);}
+.trail{position:absolute;left:0;top:0;bottom:0;border-radius:999px;width:0;background:repeating-linear-gradient(90deg,var(--rc) 0 9px,rgba(255,255,255,.85) 9px 11px);transition:width 1.2s cubic-bezier(.2,.8,.2,1);}
+.runner{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid var(--rc);box-shadow:0 2px 6px rgba(19,35,58,.25);transition:left 1.2s cubic-bezier(.2,.8,.2,1);z-index:3;}
+.ms{position:absolute;top:-5px;bottom:-5px;width:0;border-left:1px dashed #b8c6d8;z-index:1;}
+.ms i{position:absolute;top:-17px;left:-12px;width:24px;text-align:center;font:600 9.5px "IBM Plex Mono",monospace;font-style:normal;color:var(--ink3);border-radius:4px;}
+.ms.hit{border-left:1px solid var(--gold);} .ms.hit i{color:#8a6d0f;background:rgba(201,162,39,.16);}
+.ms.new i{animation:flash 1.4s ease 4;} @keyframes flash{0%,100%{box-shadow:0 0 0 0 rgba(201,162,39,0);}50%{box-shadow:0 0 0 6px rgba(201,162,39,.35);}}
+.finish{position:absolute;right:-1px;top:-7px;bottom:-7px;width:6px;border-radius:1px;opacity:.6;background:repeating-linear-gradient(180deg,var(--q-navy) 0 3px,transparent 3px 6px);}
+.lpts{font:600 20px "IBM Plex Mono",monospace;text-align:right;color:var(--q-navy);line-height:1.1;} .lpts small{display:block;font:500 11px Inter,sans-serif;color:var(--ink3);margin-top:2px;} .lpts small b{color:var(--ok);font-weight:600;}
+.read{background:repeating-linear-gradient(90deg,var(--A) 0 7px,#fff 7px 8px,var(--C) 8px 15px,#fff 15px 16px,var(--G) 16px 23px,#fff 23px 24px,var(--T) 24px 31px,#fff 31px 32px);}
+.podium{display:flex;justify-content:center;align-items:flex-end;gap:16px;margin:10px 0 0;min-height:290px;}
+.pod{width:200px;text-align:center;}
+.pod .av{width:56px;height:56px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font:600 18px Inter,sans-serif;color:#fff;background:var(--rc);box-shadow:0 4px 12px rgba(19,35,58,.18);}
+.pod .nm{font-weight:650;font-size:15px;color:var(--q-navy);} .pod .tm{font-size:12px;color:var(--ink2);}
+.pod .blk{margin-top:12px;border-radius:10px 10px 0 0;border:1px solid var(--line);border-bottom:none;border-top:4px solid var(--mc);background:linear-gradient(180deg,#eef4fb,#fff);
+ display:flex;flex-direction:column;align-items:center;padding-top:14px;height:0;overflow:hidden;transition:height 1s cubic-bezier(.2,.8,.2,1);}
+.pod .place{font:600 11px "IBM Plex Mono",monospace;letter-spacing:.14em;color:var(--mc);}
+.pod .pv{font:600 30px "IBM Plex Mono",monospace;color:var(--q-navy);line-height:1.2;} .pod .pl{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);}
+.p1{--mc:var(--gold);} .p2{--mc:var(--silver);} .p3{--mc:var(--bronze);}
+.badges{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:8px;}
+.bdg{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;padding:3px 8px;border-radius:6px;background:var(--card2);border:1px solid var(--line);color:var(--ink);white-space:nowrap;margin:1px 0;}
+.bdg i{width:6px;height:6px;border-radius:50%;background:var(--bc);display:inline-block;}
 table.t{width:100%;border-collapse:collapse;font-size:13px;}
-.t th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);padding:8px;border-bottom:1px solid var(--line);}
-.t td{padding:9px 8px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top;} .t tr:hover td{background:rgba(255,255,255,.03);}
-.n{text-align:right;} .muted{color:var(--ink2);} .big{font:700 18px Fredoka,Inter,sans-serif;}
-.tix{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-.tk{position:relative;display:flex;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#ffe58a,#ffc93c);color:#2a1a00;box-shadow:0 10px 24px rgba(0,0,0,.3);transform:rotate(-.7deg);transition:.2s;}
-.tk:nth-child(even){transform:rotate(.7deg);} .tk:hover{transform:rotate(0) translateY(-3px);}
-.tk .l{flex:1;padding:14px 16px;border-right:2px dashed rgba(42,26,0,.35);} .tk .r{width:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.28);}
-.tk .r b{font:700 32px Fredoka,Inter,sans-serif;line-height:1;} .tk .r span{font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;}
-.tk .nm{font:700 17px Fredoka,Inter,sans-serif;} .tk .tm{font-size:12px;opacity:.75;} .tk .ch{margin-top:8px;font-size:12px;font-weight:700;}
-.tk .bar{height:6px;border-radius:3px;background:rgba(42,26,0,.15);margin-top:4px;overflow:hidden;} .tk .bar i{display:block;height:100%;background:#2a1a00;}
-.tk::before,.tk::after{content:"";position:absolute;right:80px;width:16px;height:16px;border-radius:50%;background:#1b1442;} .tk::before{top:-8px;} .tk::after{bottom:-8px;}
-.pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;}
-.s-Closed{background:rgba(34,227,154,.18);color:var(--A);} .s-Infunnel{background:rgba(63,169,255,.18);color:var(--C);} .s-Lost{background:rgba(255,93,115,.18);color:var(--T);} .s-Notqualified{background:rgba(255,201,60,.18);color:var(--G);}
-.search{width:100%;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:#fff;font:14px Inter,sans-serif;margin-bottom:12px;}
-.search::placeholder{color:var(--ink2);}
-.bars{display:flex;flex-direction:column;gap:11px;} .brow{display:grid;grid-template-columns:180px 1fr 64px;gap:10px;align-items:center;font-size:13px;}
-.btrack{height:14px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;} .bfill{height:100%;border-radius:999px;width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1);}
-.iss{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:rgba(255,201,60,.15);color:var(--G);margin:2px 4px 2px 0;}
-.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;}
-.rule{border-radius:18px;padding:18px;background:var(--card);border:1px solid var(--line);transition:.2s;} .rule:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.3);}
-.rule .ic{font-size:32px;} .rule .pts{font:700 26px Fredoka,Inter,sans-serif;color:var(--A);margin-top:4px;} .rule h3{margin:0 0 6px;font-size:14px;color:var(--ink2);text-transform:uppercase;letter-spacing:.08em;} .rule p{margin:0;color:#d6dcf5;font-size:13px;}
-.prize{border:2px dashed rgba(255,216,77,.5);border-radius:18px;padding:24px;text-align:center;background:rgba(255,216,77,.06);margin-bottom:16px;}
-.prize .ic{font-size:46px;} .prize h3{margin:6px 0 4px;font-size:22px;color:var(--gold);}
-.movers{list-style:none;padding:0;margin:0;} .movers li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.08);}
-.foot{text-align:center;color:var(--ink2);font-size:11.5px;margin-top:22px;}
-@media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr);} .grid2{grid-template-columns:1fr;} .lane{grid-template-columns:34px 110px 1fr 56px;} .hero h1{font-size:30px;} .pod{width:31%;} .brow{grid-template-columns:120px 1fr 50px;}}
+.t th{text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);padding:8px;border-bottom:2px solid var(--line);}
+.t td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top;} .t tr:hover td{background:#f7faff;}
+.n{text-align:right;} .muted{color:var(--ink2);} .big{font:600 15px "IBM Plex Mono",monospace;color:var(--q-navy);} .pos{color:var(--ok);}
+.prize{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;border:1px dashed var(--q-blue);border-radius:14px;padding:20px 24px;background:#eef5fc;margin-bottom:18px;}
+.prize h3{margin:0 0 4px;font-size:18px;color:var(--q-navy);} .drum{text-align:center;} .drum b{display:block;font:600 44px "IBM Plex Mono",monospace;color:var(--q-blue);line-height:1;} .drum span{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);}
+.tix{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;}
+.tk{position:relative;display:flex;min-height:126px;border-radius:10px;background:linear-gradient(135deg,#ffffff 0%,#eaf3fc 100%);border:1.5px solid var(--q-blue);box-shadow:0 4px 12px rgba(0,47,108,.10);transition:.2s;
+ -webkit-mask:radial-gradient(circle 11px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 11px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;
+ mask:radial-gradient(circle 11px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 11px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;}
+.tk:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(0,47,108,.16);}
+.tk .l{flex:1;padding:14px 18px 12px 24px;border-right:2px dashed rgba(0,99,178,.5);}
+.tk .lbl{font:600 10px "IBM Plex Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--q-blue);}
+.tk .nm{font-weight:700;font-size:16px;color:var(--q-navy);margin-top:4px;} .tk .tm{font-size:12px;color:var(--ink2);}
+.tk .meta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;}
+.tk .odds{display:flex;align-items:center;gap:10px;} .tk .ch{font-size:11.5px;color:var(--ink2);line-height:1.35;}
+.tk .serial{display:block;font:500 10.5px "IBM Plex Mono",monospace;color:var(--ink3);letter-spacing:.08em;margin-top:2px;}
+.ring{flex:0 0 46px;width:46px;height:46px;border-radius:50%;background:conic-gradient(var(--q-blue) calc(var(--p) * 1%),#dbe6f3 0);display:flex;align-items:center;justify-content:center;}
+.ring span{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font:600 10.5px "IBM Plex Mono",monospace;color:var(--q-navy);}
+.tk .code{flex:0 0 70px;height:24px;opacity:.7;background:repeating-linear-gradient(90deg,var(--q-navy) 0 2px,transparent 2px 4px,var(--q-navy) 4px 5px,transparent 5px 8px,var(--q-navy) 8px 11px,transparent 11px 13px);}
+.tk .r{width:106px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--q-blue),var(--q-navy));border-radius:0 8px 8px 0;padding-right:6px;}
+.tk .r b{font:600 36px "IBM Plex Mono",monospace;line-height:1;color:#fff;} .tk .r span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#cfe0f3;margin-top:6px;}
+.tk .r em{font-style:normal;font:500 9.5px "IBM Plex Mono",monospace;letter-spacing:.12em;color:#9fdcf5;margin-top:8px;}
+.tk::before,.tk::after{content:"";position:absolute;right:96px;width:18px;height:18px;border-radius:50%;background:var(--bg);z-index:2;} .tk::before{top:-10px;} .tk::after{bottom:-10px;}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;white-space:nowrap;}
+.s-Closed{background:#e9f5e1;color:#3d7f21;} .s-Infunnel{background:#e5f0fa;color:var(--q-blue);} .s-Lost{background:#fbe7ea;color:var(--bad);} .s-Notqualified{background:#fdf2dc;color:#a46800;}
+.search{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font:14px Inter,sans-serif;margin-bottom:12px;}
+.search::placeholder{color:var(--ink3);} .search:focus{outline:none;border-color:var(--q-blue);box-shadow:0 0 0 3px rgba(0,99,178,.12);}
+.bars{display:flex;flex-direction:column;gap:12px;} .brow{display:grid;grid-template-columns:190px 1fr 64px;gap:12px;align-items:center;font-size:13px;}
+.btrack{height:10px;border-radius:999px;background:var(--trk);overflow:hidden;} .bfill{height:100%;border-radius:999px;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1);}
+.iss{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;background:#fdf2dc;color:#8a5a00;border:1px solid #f3d9a6;margin:2px 4px 2px 0;}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+.rule{background:#fff;border:1px solid var(--line);border-top:3px solid var(--q-blue);border-radius:12px;padding:18px;}
+.rule .k{display:flex;align-items:center;gap:8px;font:600 11px "IBM Plex Mono",monospace;letter-spacing:.14em;color:var(--q-blue);text-transform:uppercase;} .rule .k .ic{width:18px;height:18px;}
+.rule .pts{font:600 22px "IBM Plex Mono",monospace;color:var(--q-navy);margin:8px 0 6px;} .rule p{color:var(--ink2);font-size:13px;margin:0;}
+.movers{list-style:none;padding:0;margin:0;} .movers li{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);}
+.foot{text-align:center;color:var(--ink3);font-size:11.5px;margin-top:24px;}
+@media(max-width:900px){.stories{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr);} .grid2{grid-template-columns:1fr;} .lane{grid-template-columns:30px 130px 1fr 70px;} .hero h1{font-size:26px;} .pod{width:32%;} .brow{grid-template-columns:120px 1fr 50px;} .stories{grid-template-columns:1fr;}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style></head><body>
-<canvas id="confetti"></canvas>
 <div class="wrap">
  <div class="hero"><div class="helix" id="helix"></div>
   <div class="hero-row"><div>
     <div class="eyebrow">QIAcast &middot; Next-Generation Sequencing</div>
     <h1>NGS Sales Contest &amp; Raffle</h1>
-    <p class="tagline">Sequence your success: every NGS product is a raffle ticket. Close the deal for +4 more!</p>
+    <p class="tagline">Who's sequencing their way to the top? Every NGS product in the funnel earns a raffle ticket &mdash; close the deal for four more.</p>
     <div class="asof">QIAGEN North America &middot; Sept 1, 2026 &ndash; Jan 1, 2027 &middot; updated <span id="asof"></span></div></div>
    <div class="countdown"><div class="n" id="days">0</div><div class="l">days left</div></div></div>
+  <div class="sb" id="sb"></div>
   <div class="ticker"><div class="track" id="ticker"></div></div>
+  <div class="basebar"><i style="background:var(--A)"></i><i style="background:var(--G)"></i><i style="background:#f2b705"></i><i style="background:#c8102e"></i></div>
  </div>
  <div class="chips" id="chips"></div>
  <div class="tabs" id="tabs">
-  <button class="tab on" data-p="0">&#127937; Team Race</button>
-  <button class="tab" data-p="1">&#127942; Hall of Fame</button>
-  <button class="tab" data-p="2">&#127903; Raffle Tickets</button>
-  <button class="tab" data-p="3">&#128200; Momentum</button>
-  <button class="tab" data-p="4">&#129516; Opportunities</button>
-  <button class="tab" data-p="5">&#9889; Power-Ups</button>
-  <button class="tab" data-p="6">&#127918; How to Play</button></div>
+  <button class="tab on" data-p="0" data-i="flag">Team Race</button><button class="tab" data-p="1" data-i="trophy">Leaderboard</button>
+  <button class="tab" data-p="2" data-i="ticket">Raffle Tickets</button><button class="tab" data-p="3" data-i="chart">Momentum</button>
+  <button class="tab" data-p="4" data-i="flowcell">Opportunities</button><button class="tab" data-p="5" data-i="check">Opportunity Quality</button>
+  <button class="tab" data-p="6" data-i="book">Rules</button></div>
 
  <div class="page on" id="p0"><div class="kpis" id="kpis"></div><div class="leader" id="leader"></div>
-  <div class="card"><h2>The race to January 1</h2><p class="sub">Every ticket moves your team closer to the finish flag</p><div id="lanes"></div></div>
-  <div class="card"><h2>Region showdown</h2><p class="sub">Tickets by region</p><div class="bars" id="regionBars"></div></div></div>
+  <div class="stories" id="stories"></div>
+  <div class="card"><h2 data-i="flag">Race to January 1</h2><p class="sub" id="raceSub"></p><div id="lanes"></div></div>
+  <div class="card"><h2 data-i="dna">Regions</h2><p class="sub">Tickets by region</p><div class="bars" id="regionBars"></div></div></div>
 
- <div class="page" id="p1"><div class="card"><h2>The podium</h2><p class="sub">Top reps by raffle tickets</p><div class="podium" id="podium"></div></div>
-  <div class="card"><h2>Full leaderboard</h2><p class="sub">Badges: &#127903; On the board &middot; &#127942; Closer &middot; &#129516; Multiplexer (3+ NGS products on one opp) &middot; &#128293; Hot streak (scored in the last 7 days) &middot; &#128142; Double digits</p>
-   <table class="t" id="repTable"></table></div></div>
+ <div class="page" id="p1"><div class="card"><h2 data-i="trophy">Top performers</h2><p class="sub">The top three reps by raffle tickets</p><div class="podium" id="podium"></div></div>
+  <div class="card"><h2 data-i="users">Rep leaderboard</h2><p class="sub" id="badgeLegend"></p><table class="t" id="repTable"></table></div></div>
 
- <div class="page" id="p2"><div class="prize"><div class="ic">&#127873;</div><h3>Raffle prizes: coming soon!</h3><div class="muted">More tickets = more chances to win &middot; <b id="totTix">0</b> tickets in the drum so far</div></div>
+ <div class="page" id="p2"><div class="prize"><div><h3>Raffle prizes to be announced</h3><div class="muted">More tickets, more chances to win. Each ticket shows that rep's current odds.</div></div>
+   <div class="drum"><b id="totTix">0</b><span>tickets in the draw</span></div></div>
   <div class="tix" id="tix"></div></div>
 
- <div class="page" id="p3"><div class="card"><h2>Momentum</h2><p class="sub">Cumulative tickets by team, week by week</p><div id="chart"></div><div class="chips" id="chartLeg" style="margin:10px 0 0"></div></div>
-  <div class="grid2"><div class="card"><h2>Tickets per week</h2><p class="sub">All selected teams</p><div class="bars" id="weekBars"></div></div>
-   <div class="card"><h2>&#128293; This week's movers</h2><p class="sub">Tickets earned in the last 7 days</p><ul class="movers" id="movers"></ul></div></div></div>
+ <div class="page" id="p3"><div class="card"><h2 data-i="chart">Momentum</h2><p class="sub">Cumulative tickets by team, week by week</p><div id="chart"></div><div class="chips" id="chartLeg" style="margin:12px 0 0"></div></div>
+  <div class="grid2"><div class="card"><h2 data-i="dna">Tickets per week</h2><p class="sub">All selected teams</p><div class="bars" id="weekBars"></div></div>
+   <div class="card"><h2 data-i="spark">This week's movers</h2><p class="sub" id="moversSub"></p><ul class="movers" id="movers"></ul></div></div></div>
 
- <div class="page" id="p4"><div class="card"><h2>NGS opportunities</h2><p class="sub">Every NA opportunity with an NGS (UNGS) product created since Sept 1</p>
-   <input class="search" id="q" placeholder="Search opportunity, account, rep, product..."><table class="t" id="oppTable"></table></div></div>
+ <div class="page" id="p4"><div class="card"><h2 data-i="flowcell">NGS opportunities</h2><p class="sub">Every NA opportunity with an NGS (UNGS) product created since Sept 1</p>
+   <input class="search" id="q" placeholder="Search opportunity, account, rep, product"><table class="t" id="oppTable"></table></div></div>
 
  <div class="page" id="p5"><div class="grid2">
-   <div class="card"><h2>&#9889; Opportunity power-ups</h2><p class="sub">How many opportunities hit each "good opportunity" standard</p><div class="bars" id="dqBars"></div></div>
-   <div class="card"><h2>&#128275; Unlock tickets now</h2><p class="sub">Move these to Enter the Funnel to start scoring</p><div id="quick"></div></div></div>
-  <div class="card"><h2>Level up these opportunities</h2><p class="sub">If it's not in Salesforce, it doesn't exist</p><table class="t" id="dqTable"></table></div></div>
+   <div class="card"><h2 data-i="check">Opportunity standards</h2><p class="sub">Share of opportunities meeting each standard from the contest guide</p><div class="bars" id="dqBars"></div></div>
+   <div class="card"><h2 data-i="spark">Unlock tickets now</h2><p class="sub">Move these to Enter the Funnel to start scoring</p><div id="quick"></div></div></div>
+  <div class="card"><h2 data-i="target">Opportunities to complete</h2><p class="sub">If it's not in Salesforce, it doesn't exist</p><table class="t" id="dqTable"></table></div></div>
 
  <div class="page" id="p6"><div class="rules" id="rules"></div></div>
- <div class="foot">Data: Salesforce &middot; NGS = product budget line UNGS &middot; Points are tracked by Commercial Ops; all decisions are final.</div>
+ <div class="foot" id="foot"></div>
 </div>
 
 <script>
-const OPPS=[{"name": "UCMerced_Geekiyanage_Cons", "account": "University of California at Merced (UC Merced)", "owner": "Gina Dabbah", "team": "Inside Sales", "mgr": "Lisa Compton", "stage": "Order", "status": "Closed", "ngs": 3, "products": "QIAseq NGS Bead Binding Buffer (10.2ml); QIAseq miRNA 96 Index IL (96); QIAseq miRNA Library Kit (96)", "entry": 3, "close": 4, "pts": 7, "created": "2026-09-10", "closed_on": "2026-11-11", "close_date": "2026-11-11", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "TAMU_Berge_QIAseq miRNA 12 Index Kit IL UDI (12)", "account": "Texas A&M University", "owner": "Nathan To", "team": "Pacific 2", "mgr": "Nicole Hardy", "stage": "Order", "status": "Closed", "ngs": 2, "products": "QIAseq miRNA 12 Index Kit IL UDI (12); QIAseq miRNA Library Kit (12)", "entry": 2, "close": 4, "pts": 6, "created": "2026-10-08", "closed_on": "2026-11-05", "close_date": "2026-11-05", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "TAMU_Miyamoto_QIAseq miRNA Library Kit (12) & Human XpressRef Universal Total RNA", "account": "Texas A&M University", "owner": "Nathan To", "team": "Pacific 2", "mgr": "Nicole Hardy", "stage": "Order", "status": "Closed", "ngs": 1, "products": "QIAseq miRNA Library Kit (12)", "entry": 1, "close": 4, "pts": 5, "created": "2026-09-14", "closed_on": "2026-09-22", "close_date": "2026-09-22", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "ADM_Cleto_QIAquick Gel Extraction Kit (250) & QIAseq FX DNA Library UDI Kit (24)", "account": "Archer Daniels Midland", "owner": "David Mack", "team": "Inside Sales", "mgr": "Lisa Compton", "stage": "Mid Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq FX DNA Library UDI Kit (24)", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-10", "closed_on": null, "close_date": "2026-12-10", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "NeoGenomics_Wong_MRD panel", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Enter the Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq xHYB Custom Human Panel (96) - 1-500", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-11", "closed_on": null, "close_date": "2027-10-29", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "UTEP_Koculi_QIAseq FastSelect \u2013rRNA Fish Kit (24)", "account": "Chemistry", "owner": "David Mack", "team": "Inside Sales", "mgr": "Lisa Compton", "stage": "Mid Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq FastSelect \u2013rRNA Fish Kit (24)", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-11", "closed_on": null, "close_date": "2026-12-11", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "NeoGenomics_Danielson_UBA panel Q4'26", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Best Few - Forecastable", "status": "In funnel", "ngs": 1, "products": "QIAseq Multimodal Panel NeoG Custom (96)", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-16", "closed_on": null, "close_date": "2026-12-31", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "UofT/CAGEF_Pauline Wang_QIAseq Universal Metagenome Library Kit", "account": "Centre for the Analysis of Genome Evolution and Function (CAGEF)", "owner": "Elisa Kawahara", "team": "Canada", "mgr": "Yass Zia", "stage": "Enter the Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq Universal Metagenome Lib Kit 24", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-25", "closed_on": null, "close_date": "2026-12-31", "issues": ["Application", "Next step"]}, {"name": "NeoGenomics_Wong_WGS", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Universe", "status": "Not qualified", "ngs": 1, "products": "QIAseq FX DNA Library UDI-A Kit HT (96)", "entry": 0, "close": 0, "pts": 0, "created": "2026-09-11", "closed_on": null, "close_date": "2028-03-31", "issues": ["Stage at Enter Funnel or later", "Application", "Competitive info / notes", "Next step"]}, {"name": "NeoGenomics_Chandramohan_cfDNA Ultra", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Above the Funnel", "status": "Not qualified", "ngs": 1, "products": "QIAseq DNA Ultra Reagent Kit", "entry": 0, "close": 0, "pts": 0, "created": "2026-09-24", "closed_on": null, "close_date": "2027-04-30", "issues": ["Stage at Enter Funnel or later", "Application", "Competitive info / notes", "Next step"]}, {"name": "CONS_CACAW_MSL-GenomeScienceCentre_Griffith_FastSelectFish", "account": "BC Cancer Agency (BCCRC)", "owner": "Vanessa Collins", "team": "Canada", "mgr": "Yass Zia", "stage": "Above the Funnel", "status": "Not qualified", "ngs": 1, "products": "QIAseq FastSelect \u2013rRNA Fish Kit (96)", "entry": 0, "close": 0, "pts": 0, "created": "2026-09-29", "closed_on": null, "close_date": "2026-11-15", "issues": ["Stage at Enter Funnel or later", "Application", "Next step"]}, {"name": "Myriad_Banks_QIAseq FX Q4 2026", "account": "Myriad Genetics", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Above the Funnel", "status": "Not qualified", "ngs": 1, "products": "QIAseq\u2122 FX Components, cus", "entry": 0, "close": 0, "pts": 0, "created": "2026-10-08", "closed_on": null, "close_date": "2026-12-31", "issues": ["Stage at Enter Funnel or later", "Application", "Competitive info / notes", "Next step"]}, {"name": "TAMU_Berge_QIAseq miRNA 96 Index Kit IL UDI-A (96)", "account": "Texas A&M University", "owner": "Nathan To", "team": "Pacific 2", "mgr": "Nicole Hardy", "stage": "Lost", "status": "Lost", "ngs": 2, "products": "QIAseq miRNA 96 Index Kit IL UDI-A (96); QIAseq miRNA Library Kit (96)", "entry": 0, "close": 0, "pts": 0, "created": "2026-10-09", "closed_on": null, "close_date": "2027-01-09", "issues": ["Application", "Competitive info / notes", "Next step"]}];
-const META={"as_of": "2026-11-13", "start": "2026-09-01", "end": "2026-12-31", "end_excl": "2027-01-01", "teams": ["Atlantic 1", "Atlantic 2", "Pacific 1", "Pacific 2", "Biopharma East", "Biopharma West", "Inside Sales", "Canada", "Key Accounts"], "region": {"Atlantic 1": "Atlantic", "Atlantic 2": "Atlantic", "Pacific 1": "Pacific", "Pacific 2": "Pacific", "Biopharma East": "Biopharma", "Biopharma West": "Biopharma", "Inside Sales": "Inside Sales", "Canada": "Canada", "Key Accounts": "Key Accounts"}, "lead": {"Atlantic 1": "Jared Sandoval", "Atlantic 2": "John Grebenc", "Pacific 1": "Louise Monte", "Pacific 2": "Nicole Hardy", "Biopharma East": "Jeffrey Durocher", "Biopharma West": "Patrick Bronson-Doherty", "Inside Sales": "Lisa Compton", "Canada": "Yass Zia", "Key Accounts": "Deborah Roney"}, "checks": ["Stage at Enter Funnel or later", "Naming convention", "Opportunity value", "Application", "Competitive info / notes", "Next step", "Close date not in the past"], "pts_line": 1, "pts_close": 4, "closed_stages": ["Order", "Won", "Order Partially Won", "PO received"]};
+const OPPS=[{"name": "MicroBio_Ferguson_QIAseqFX", "account": "Micro Bio Tech LLC", "owner": "Karen Fortenberry", "team": "Inside Sales", "mgr": "Lisa Compton", "stage": "Order", "status": "Closed", "ngs": 4, "products": "QIAseq 16S/ITS Pro Screening Panel (24); QIAseq 16S/ITS Smart Control (10); QIAseq FX DNA Library UDI Kit (24); QIAseq UX 24 Index Kit IL UDI (24)", "entry": 4, "close": 4, "pts": 8, "created": "2026-10-07", "closed_on": "2026-11-13", "close_date": "2026-11-11", "issues": ["Application", "Next step"]}, {"name": "UCMerced_Geekiyanage_miRCURY LNA and QIAseq products", "account": "University of California at Merced (UC Merced)", "owner": "Gina Dabbah", "team": "Inside Sales", "mgr": "Lisa Compton", "stage": "Order", "status": "Closed", "ngs": 3, "products": "QIAseq NGS Bead Binding Buffer (10.2ml); QIAseq miRNA 96 Index IL (96); QIAseq miRNA Library Kit (96)", "entry": 3, "close": 4, "pts": 7, "created": "2026-09-10", "closed_on": "2026-11-14", "close_date": "2026-11-11", "issues": ["Application", "Next step"]}, {"name": "CONS_UHN_Elisa Pasini_QIAseq Custom Methyl Panel", "account": "Bhat (Mamatha) Lab", "owner": "Elisa Kawahara", "team": "Canada", "mgr": "Yass Zia", "stage": "PO received", "status": "Closed", "ngs": 2, "products": "QIAseq Custom Targeted MethylPanel(96) - 101-200; QIAseq Targeted Methyl 96 Index Set B", "entry": 2, "close": 4, "pts": 6, "created": "2026-10-02", "closed_on": "2026-11-13", "close_date": "2026-12-31", "issues": ["Application", "Next step"]}, {"name": "TAMU_Berge_QIAseq miRNA 12 Index Kit IL UDI (12)", "account": "Texas A&M University", "owner": "Nathan To", "team": "Pacific South", "mgr": "Nicole Hardy", "stage": "Order", "status": "Closed", "ngs": 2, "products": "QIAseq miRNA 12 Index Kit IL UDI (12); QIAseq miRNA Library Kit (12)", "entry": 2, "close": 4, "pts": 6, "created": "2026-10-08", "closed_on": "2026-11-05", "close_date": "2026-11-05", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "TAMU_Miyamoto_QIAseq miRNA Library Kit (12) & Human XpressRef Universal Total RNA", "account": "Texas A&M University", "owner": "Nathan To", "team": "Pacific South", "mgr": "Nicole Hardy", "stage": "Order", "status": "Closed", "ngs": 1, "products": "QIAseq miRNA Library Kit (12)", "entry": 1, "close": 4, "pts": 5, "created": "2026-09-14", "closed_on": "2026-09-22", "close_date": "2026-09-22", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "Bio-Marker.ai_BrianMaccaba_miRNAextraction+sequencing", "account": "Bio-marker.ai LLC", "owner": "Lorenzo Jones", "team": "Unmapped", "mgr": "Barbara Gould", "stage": "Mid Funnel", "status": "In funnel", "ngs": 2, "products": "QIAseq miRNA 96 Index Kit IL UDI-A (96); QIAseq miRNA Library Kit (96)", "entry": 2, "close": 0, "pts": 2, "created": "2026-11-10", "closed_on": null, "close_date": "2026-12-31", "issues": ["Application"]}, {"name": "ADM_Cleto_QIAquick Gel Extraction Kit (250) & QIAseq FX DNA Library UDI Kit (24)", "account": "Archer Daniels Midland", "owner": "David Mack", "team": "Inside Sales", "mgr": "Lisa Compton", "stage": "Mid Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq FX DNA Library UDI Kit (24)", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-10", "closed_on": null, "close_date": "2026-12-10", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "NeoGenomics_Wong_MRD panel", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Enter the Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq xHYB Custom Human Panel (96) - 1-500", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-11", "closed_on": null, "close_date": "2027-10-29", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "UTEP_Koculi_QIAseq FastSelect \u2013rRNA Fish Kit (24)", "account": "Chemistry", "owner": "David Mack", "team": "Inside Sales", "mgr": "Lisa Compton", "stage": "Mid Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq FastSelect \u2013rRNA Fish Kit (24)", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-11", "closed_on": null, "close_date": "2026-12-11", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "NeoGenomics_Danielson_UBA panel Q4'26", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Best Few - Forecastable", "status": "In funnel", "ngs": 1, "products": "QIAseq Multimodal Panel NeoG Custom (96)", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-16", "closed_on": null, "close_date": "2026-12-31", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "CONS_UofT/CAGEF_Pauline Wang_QIAseq Universal Metagenome Library Kit", "account": "Centre for the Analysis of Genome Evolution and Function (CAGEF)", "owner": "Elisa Kawahara", "team": "Canada", "mgr": "Yass Zia", "stage": "Enter the Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq Universal Metagenome Lib Kit 24", "entry": 1, "close": 0, "pts": 1, "created": "2026-09-25", "closed_on": null, "close_date": "2027-03-01", "issues": ["Application", "Next step"]}, {"name": "AGS_Rajendran_Cons", "account": "Alkek Graduate School", "owner": "Nathan To", "team": "Pacific South", "mgr": "Nicole Hardy", "stage": "Mid Funnel", "status": "In funnel", "ngs": 1, "products": "QIAseq Ultralow Input Lib UDI-B Kit (96)", "entry": 1, "close": 0, "pts": 1, "created": "2026-11-16", "closed_on": null, "close_date": "2026-12-31", "issues": ["Application", "Competitive info / notes", "Next step"]}, {"name": "NeoGenomics_Wong_WGS", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Universe", "status": "Not qualified", "ngs": 1, "products": "QIAseq FX DNA Library UDI-A Kit HT (96)", "entry": 0, "close": 0, "pts": 0, "created": "2026-09-11", "closed_on": null, "close_date": "2028-03-31", "issues": ["Stage at Enter Funnel or later", "Application", "Competitive info / notes", "Next step"]}, {"name": "NeoGenomics_Chandramohan_cfDNA Ultra", "account": "NeoGenomics, Inc.", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Above the Funnel", "status": "Not qualified", "ngs": 1, "products": "QIAseq DNA Ultra Reagent Kit", "entry": 0, "close": 0, "pts": 0, "created": "2026-09-24", "closed_on": null, "close_date": "2027-04-30", "issues": ["Stage at Enter Funnel or later", "Application", "Competitive info / notes", "Next step"]}, {"name": "CONS_CACAW_MSL-GenomeScienceCentre_Griffith_FastSelectFish", "account": "BC Cancer Agency (BCCRC)", "owner": "Vanessa Collins", "team": "Canada", "mgr": "Yass Zia", "stage": "Above the Funnel", "status": "Not qualified", "ngs": 1, "products": "QIAseq FastSelect \u2013rRNA Fish Kit (96)", "entry": 0, "close": 0, "pts": 0, "created": "2026-09-29", "closed_on": null, "close_date": "2026-11-23", "issues": ["Stage at Enter Funnel or later", "Application", "Next step"]}, {"name": "Myriad_Banks_QIAseq FX Q4 2026", "account": "Myriad Genetics", "owner": "Peter Barthmaier", "team": "Key Accounts", "mgr": "Michael Gamble", "stage": "Above the Funnel", "status": "Not qualified", "ngs": 1, "products": "QIAseq\u2122 FX Components, cus", "entry": 0, "close": 0, "pts": 0, "created": "2026-10-08", "closed_on": null, "close_date": "2026-12-31", "issues": ["Stage at Enter Funnel or later", "Application", "Competitive info / notes", "Next step"]}, {"name": "TAMU_Berge_QIAseq miRNA 96 Index Kit IL UDI-A (96)", "account": "Texas A&M University", "owner": "Nathan To", "team": "Pacific South", "mgr": "Nicole Hardy", "stage": "Lost", "status": "Lost", "ngs": 2, "products": "QIAseq miRNA 96 Index Kit IL UDI-A (96); QIAseq miRNA Library Kit (96)", "entry": 0, "close": 0, "pts": 0, "created": "2026-10-09", "closed_on": null, "close_date": "2027-01-09", "issues": ["Application", "Competitive info / notes", "Next step"]}];
+const META={"as_of": "2026-11-18", "start": "2026-09-01", "end": "2026-12-31", "end_excl": "2027-01-01", "teams": ["Atlantic North", "Atlantic South", "Pacific West", "Pacific South", "Biopharma East", "Biopharma West", "Inside Sales", "Canada", "Key Accounts"], "region": {"Atlantic North": "Atlantic", "Atlantic South": "Atlantic", "Pacific West": "Pacific", "Pacific South": "Pacific", "Biopharma East": "Biopharma", "Biopharma West": "Biopharma", "Inside Sales": "Inside Sales", "Canada": "Canada", "Key Accounts": "Key Accounts"}, "lead": {"Atlantic South": "Jared Sandoval", "Atlantic North": "John Grebenc", "Pacific West": "Louise Monte", "Pacific South": "Nicole Hardy", "Biopharma East": "Jeffrey Durocher", "Biopharma West": "Patrick Bronson-Doherty", "Inside Sales": "Lisa Compton", "Canada": "Yass Zia", "Key Accounts": "Deborah Roney"}, "checks": ["Stage at Enter Funnel or later", "Naming convention", "Opportunity value", "Application", "Competitive info / notes", "Next step", "Close date not in the past"], "pts_line": 1, "pts_close": 4, "closed_stages": ["Order", "Won", "Order Partially Won", "PO received"]};
+const PREV={"date": "2026-11-11", "source": "reconstructed", "team": {"Atlantic North": {"pts": 0, "rank": 5}, "Atlantic South": {"pts": 0, "rank": 5}, "Pacific West": {"pts": 0, "rank": 5}, "Pacific South": {"pts": 11, "rank": 1}, "Biopharma East": {"pts": 0, "rank": 5}, "Biopharma West": {"pts": 0, "rank": 5}, "Inside Sales": {"pts": 9, "rank": 2}, "Canada": {"pts": 3, "rank": 3}, "Key Accounts": {"pts": 2, "rank": 4}}, "rep": {"David Mack": {"pts": 2, "rank": 5}, "Elisa Kawahara": {"pts": 3, "rank": 3}, "Gina Dabbah": {"pts": 3, "rank": 3}, "Karen Fortenberry": {"pts": 4, "rank": 2}, "Nathan To": {"pts": 11, "rank": 1}, "Peter Barthmaier": {"pts": 2, "rank": 5}, "Vanessa Collins": {"pts": 0, "rank": 7}}};
 
-const NT=['#22e39a','#3fa9ff','#ffc93c','#ff5d73','#9b5cff','#ff4fd8','#00e0ff','#ff9f43','#b6ff3c'];
-const TCOL={}; META.teams.forEach((t,i)=>{TCOL[t]=NT[i%NT.length];});
+const PAL=['#0063b2','#00a3e0','#6cb33f','#002f6c','#e87722','#7a5ba6','#2ba59b','#c8102e','#8a9bb0'];
+const TCOL={}; META.teams.forEach((t,i)=>{TCOL[t]=PAL[i%PAL.length];});
 let sel='All';
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fmt=n=>(n||0).toLocaleString('en-US');
@@ -155,62 +205,118 @@ const cur=()=>ALL.filter(o=>sel==='All'||o.team===sel);
 const sum=(a,f)=>a.reduce((s,o)=>s+f(o),0);
 const AS=new Date(META.as_of+'T00:00:00');
 const dd=s=>s?new Date(s+'T00:00:00'):null;
-const within7=s=>{const d=dd(s);if(!d)return false;const g=(AS-d)/864e5;return g>=0&&g<=7;};
+const fmtD=s=>dd(s).toLocaleDateString('en-US',{month:'short',day:'numeric'});
 const initials=n=>String(n).split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const PD=fmtD(PREV.date);
+const MS=[10,25,50,100,200];
+function scaleMax(mx){for(let i=0;i<MS.length;i++){if(MS[i]>=mx)return MS[i];}return Math.ceil(mx/50)*50;}
+function nextMs(p){for(let i=0;i<MS.length;i++){if(MS[i]>p)return MS[i];}return null;}
+
+// Line-art icons (stroke = currentColor)
+const ICON={
+ ticket:'<path d="M3 7a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-3a2 2 0 0 0 0-4z"/><path d="M15 5v14" stroke-dasharray="2 2"/>',
+ trophy:'<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 13v4M8 21h8M10 17h4v4h-4z"/>',
+ dna:'<path d="M7 3c0 5 10 5 10 9s-10 4-10 9M17 3c0 5-10 5-10 9s10 4 10 9"/><path d="M8.5 6.5h7M10 9h4M10 15h4M8.5 17.5h7"/>',
+ flowcell:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 9.5h10M7 12h10M7 14.5h10"/><circle cx="5.5" cy="12" r=".6"/><circle cx="18.5" cy="12" r=".6"/>',
+ chart:'<path d="M4 4v16h16"/><path d="M7 15l4-4 3 3 6-7"/><path d="M16 7h4v4"/>',
+ target:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
+ flag:'<path d="M5 21V4"/><path d="M5 4h12l-2.5 4L17 12H5"/>',
+ spark:'<path d="M13 2L5 13.5h6L10 22l8-11.5h-6z"/>',
+ users:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.6A5 5 0 0 1 21 20"/>',
+ check:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16.5 9"/>',
+ book:'<path d="M4 4.5A1.5 1.5 0 0 1 5.5 3H20v16H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M4 20.5V4.5M8 7h8M8 10h6"/>',
+ rocket:'<path d="M5 19l4-4"/><path d="M14 4c3 0 6 3 6 6l-7 7-6-6z"/><circle cx="15" cy="9" r="1.5"/><path d="M7 11l-3 1 2 2M13 17l-1 3-2-2"/>',
+ gift:'<rect x="3" y="9" width="18" height="12" rx="1.5"/><path d="M3 13h18M12 9v12"/><path d="M12 9c-2-4-6-4-6-1.5S10 9 12 9zM12 9c2-4 6-4 6-1.5S14 9 12 9z"/>',
+ route:'<circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/>'};
+function ic(k){return `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[k]||''}</svg>`;}
+function decorate(){document.querySelectorAll('[data-i]').forEach(e=>{if(!e.querySelector('svg.ic'))e.insertAdjacentHTML('afterbegin',ic(e.dataset.i));});}
+
+const BADGES={board:['On the board','#0063b2'],closer:['Closer','#6cb33f'],multi:['Multiplexer','#00a3e0'],hot:['Hot streak','#e87722'],ten:['Double digits','#c9a227']};
 function countUp(el,to){if(!el)return;const t0=performance.now(),D=900;function step(t){const p=Math.min(1,(t-t0)/D);el.textContent=fmt(Math.round(to*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
 function grow(q){setTimeout(()=>{document.querySelectorAll(q+' .bfill').forEach(e=>{e.style.width=e.dataset.w+'%';});},60);}
 function medal(i,pts){return `<div class="medal ${pts>0&&i<3?'m'+(i+1):''}">${i+1}</div>`;}
 function pill(s){return `<span class="pill s-${s.replace(/ /g,'')}">${esc(s)}</span>`;}
+function bdg(k){return `<span class="bdg" style="--bc:${BADGES[k][1]}"><i></i>${BADGES[k][0]}</span>`;}
+function mv(prank,rank,isNew){if(isNew)return `<span class="mv new" title="New on the board since ${PD}">NEW</span>`;if(prank==null)return '';const d=prank-rank;
+ return d>0?`<span class="mv up" title="Up ${d} since ${PD}">&#9650; ${d}</span>`:d<0?`<span class="mv dn" title="Down ${-d} since ${PD}">&#9660; ${-d}</span>`:`<span class="mv eq" title="No change since ${PD}">&ndash;</span>`;}
+function rankAll(list){list.forEach(x=>{x.rank=1+list.filter(y=>y.pts>x.pts).length;});return list;}
 
-function repsOf(a){const m={};a.forEach(o=>{if(!m[o.owner])m[o.owner]={owner:o.owner,team:o.team,pts:0,entry:0,close:0,opps:0,closed:0,ngs:0,multi:false,hot:false};const r=m[o.owner];
-  r.pts+=o.pts;r.entry+=o.entry;r.close+=o.close;r.opps++;r.ngs+=o.ngs;if(o.status==='Closed')r.closed++;if(o.ngs>=3&&o.pts>0)r.multi=true;
-  if((o.entry>0&&within7(o.created))||(o.close>0&&within7(o.closed_on)))r.hot=true;});
+function repsOf(a){const m={};a.forEach(o=>{if(!m[o.owner])m[o.owner]={owner:o.owner,team:o.team,pts:0,entry:0,close:0,opps:0,closed:0,ngs:0,multi:false};const r=m[o.owner];
+  r.pts+=o.pts;r.entry+=o.entry;r.close+=o.close;r.opps++;r.ngs+=o.ngs;if(o.status==='Closed')r.closed++;if(o.ngs>=3&&o.pts>0)r.multi=true;});
  return Object.keys(m).map(k=>m[k]).sort((x,y)=>y.pts-x.pts||y.closed-x.closed||x.owner.localeCompare(y.owner));}
-function badges(r){const b=[];if(r.pts>0)b.push('&#127903; On the board');if(r.closed>0)b.push('&#127942; Closer');if(r.multi)b.push('&#129516; Multiplexer');if(r.hot)b.push('&#128293; Hot streak');if(r.pts>=10)b.push('&#128142; Double digits');return b;}
-function teamRows(){return META.teams.map(t=>{const a=ALL.filter(o=>o.team===t);return {team:t,region:META.region[t],lead:META.lead[t],pts:sum(a,o=>o.pts),
-  opps:a.length,closed:a.filter(o=>o.status==='Closed').length};}).sort((x,y)=>y.pts-x.pts||y.closed-x.closed||x.team.localeCompare(y.team));}
+function repIndex(){const r=rankAll(repsOf(ALL));const m={};
+ r.forEach(x=>{const p=PREV.rep[x.owner];x.prank=p?p.rank:null;x.ppts=p?p.pts:0;x.wk=x.pts-x.ppts;x.isNew=x.pts>0&&x.ppts===0;m[x.owner]=x;});return m;}
+const REP=repIndex();
+function badges(r){const g=REP[r.owner]||{};const b=[];if(r.pts>0)b.push('board');if(r.closed>0)b.push('closer');if(r.multi)b.push('multi');if(g.wk>0)b.push('hot');if(r.pts>=10)b.push('ten');return b.map(bdg).join('');}
+function teamRows(){const r=META.teams.map(t=>{const a=ALL.filter(o=>o.team===t);const p=PREV.team[t]||{pts:0,rank:null};
+  return {team:t,region:META.region[t],lead:META.lead[t],pts:sum(a,o=>o.pts),opps:a.length,closed:a.filter(o=>o.status==='Closed').length,reps:repsOf(a),ppts:p.pts,prank:p.rank};});
+ rankAll(r);r.forEach(x=>{x.wk=x.pts-x.ppts;});
+ return r.sort((x,y)=>y.pts-x.pts||y.closed-x.closed||x.team.localeCompare(y.team));}
+
+function scoreboard(){const r=teamRows().slice(0,3);const gap=r.length>1?r[0].pts-r[1].pts:0;
+ document.getElementById('sb').innerHTML='<span class="sblbl">Scoreboard</span>'+r.map((x,i)=>`<div class="sbi ${i===0&&x.pts>0?'lead':''}"><span class="pos">${x.rank}</span><span class="sbn">${esc(x.team)}</span><span class="sbp num">${fmt(x.pts)}</span></div>`).join('')
+  +(r[0]&&r[0].pts>0?`<span class="sbgap">${gap===0?'Tied at the top':'Lead: '+gap+' ticket'+(gap>1?'s':'')}</span>`:'');}
 
 function chips(){const el=document.getElementById('chips');
- el.innerHTML=['All'].concat(META.teams).map(t=>`<button class="chip ${t===sel?'on':''}" data-t="${esc(t)}">${t==='All'?'&#127758; All teams':`<span class="sw" style="background:${TCOL[t]}"></span>${esc(t)}`}</button>`).join('');
+ el.innerHTML=['All'].concat(META.teams).map(t=>`<button class="chip ${t===sel?'on':''}" data-t="${esc(t)}">${t==='All'?'All teams':`<span class="sw" style="background:${TCOL[t]}"></span>${esc(t)}`}</button>`).join('');
  el.querySelectorAll('.chip').forEach(b=>{b.onclick=()=>{sel=b.dataset.t;render();};});}
 
-function kpis(){const a=cur();const k=[['&#127903;','Raffle tickets',sum(a,o=>o.pts),'rgba(255,201,60,.35)'],
-  ['&#129516;','NGS opps scoring',a.filter(o=>o.pts>0).length,'rgba(63,169,255,.35)'],
-  ['&#127942;','Deals closed',a.filter(o=>o.status==='Closed').length,'rgba(34,227,154,.35)'],
-  ['&#128101;','Reps on the board',new Set(a.filter(o=>o.pts>0).map(o=>o.owner)).size,'rgba(255,79,216,.35)']];
- document.getElementById('kpis').innerHTML=k.map((x,i)=>`<div class="kpi" style="--glow:${x[3]}"><div class="ic">${x[0]}</div><div class="kv" id="kv${i}">0</div><div class="kl">${x[1]}</div></div>`).join('');
+function kpis(){const a=cur();const owners=new Set(a.map(o=>o.owner));const wk=Object.keys(REP).filter(k=>owners.has(k)).reduce((s,k)=>s+Math.max(0,REP[k].wk),0);
+ const k=[['ticket','Raffle tickets',sum(a,o=>o.pts),wk>0?`<b>+${fmt(wk)}</b> since ${PD}`:`${fmt(sum(a,o=>o.entry))} entry + ${fmt(sum(a,o=>o.close))} close bonus`,'var(--q-blue)'],
+  ['flowcell','Opportunities scoring',a.filter(o=>o.pts>0).length,`of ${a.length} NGS opportunities`,'var(--q-sky)'],
+  ['trophy','Deals closed',a.filter(o=>o.status==='Closed').length,'Order, Won, Partially Won, PO received','var(--q-green)'],
+  ['users','Reps on the board',new Set(a.filter(o=>o.pts>0).map(o=>o.owner)).size,'with at least one ticket','var(--q-navy)']];
+ document.getElementById('kpis').innerHTML=k.map((x,i)=>`<div class="kpi" style="--kc:${x[4]}"><div class="kl">${ic(x[0])}${x[1]}</div><div class="kv" id="kv${i}">0</div><div class="ks">${x[3]}</div></div>`).join('');
  k.forEach((x,i)=>countUp(document.getElementById('kv'+i),x[2]));}
 
-function race(){const r=teamRows();const mx=Math.max(1,...r.map(x=>x.pts));const L=document.getElementById('leader');
+function race(){const r=teamRows();const mx=Math.max(1,...r.map(x=>x.pts));const S=scaleMax(mx);const L=document.getElementById('leader');
  if(r.length&&r[0].pts>0){const gap=r[0].pts-(r[1]?r[1].pts:0);
-  L.innerHTML=`<span class="crown">&#128081;</span><div><b>${esc(r[0].team)}</b> leads the race with <b>${fmt(r[0].pts)} tickets</b>${r[1]?` &mdash; ${gap===0?'tied with':fmt(gap)+' ahead of'} ${esc(r[1].team)}`:''}. Who's catching up?</div>`;}
- else L.innerHTML=`<span class="crown">&#127937;</span><div>The race is wide open &mdash; the first NGS opportunity takes the lead!</div>`;
- document.getElementById('lanes').innerHTML=r.map((x,i)=>{const p=x.pts>0?Math.max(5,95*x.pts/mx):2;const dim=(sel!=='All'&&sel!==x.team)?'opacity:.3':'';
-  return `<div class="lane" style="${dim}">${medal(i,x.pts)}<div class="lname">${esc(x.team)}<small>${esc(x.lead)}</small></div>
-   <div class="track"><div class="trail" data-w="${p}" style="background:linear-gradient(90deg,rgba(255,255,255,0),${TCOL[x.team]})"></div>
-   <div class="runner" data-l="${p}" style="--rc:${TCOL[x.team]}">${i===0&&x.pts>0?'&#128081;':'&#129516;'}</div><span class="flag">&#127937;</span></div>
-   <div class="lpts">${fmt(x.pts)}<small>${x.closed} closed &middot; ${x.opps} opps</small></div></div>`;}).join('');
+  L.innerHTML=`<span class="ltag">LEADER</span><div><b>${esc(r[0].team)}</b> leads with <b class="num">${fmt(r[0].pts)}</b> tickets${r[1]?` &mdash; ${gap===0?'tied with':`<b class="num">${fmt(gap)}</b> ahead of`} ${esc(r[1].team)}`:''}. Can anyone catch them before January 1?</div>`;}
+ else L.innerHTML=`<span class="ltag">OPEN</span><div>No tickets yet &mdash; the first qualified NGS opportunity takes the lead.</div>`;
+ document.getElementById('raceSub').innerHTML=`Milestones at ${MS.filter(m=>m<=S).join(', ')} tickets &middot; arrows show movement since ${PD} &middot; hover a team to see its reps`;
+ document.getElementById('lanes').innerHTML=r.map((x,i)=>{const p=x.pts>0?Math.max(3,100*x.pts/S):1.5;const dim=(sel!=='All'&&sel!==x.team)?'opacity:.3':'';const nm=nextMs(x.pts);
+  const marks=MS.filter(m=>m<=S).map(m=>`<span class="ms ${x.pts>=m?'hit':''} ${x.ppts<m&&x.pts>=m?'new':''}" style="left:${100*m/S}%"><i>${m}</i></span>`).join('');
+  const pop=x.reps.length?x.reps.map(p=>`<div class="pr"><span>${esc(p.owner)}</span><span>${p.pts} tix &middot; ${p.opps} opp${p.opps>1?'s':''}</span></div>`).join(''):'<div class="pr"><span class="muted">No NGS opportunities yet</span><span></span></div>';
+  return `<div class="lane" style="${dim}">${medal(i,x.pts)}<div class="lname">${esc(x.team)}${mv(x.prank,x.rank,false)}<small>${esc(x.lead)}</small>
+    <div class="pop"><div class="ph">${esc(x.team)} &middot; ${x.closed} closed</div>${pop}</div></div>
+   <div class="track" style="--rc:${TCOL[x.team]}">${marks}<div class="trail" data-w="${p}"></div><div class="runner" data-l="${p}"></div><span class="finish"></span></div>
+   <div class="lpts">${fmt(x.pts)}<small>${x.wk>0?`<b>+${x.wk}</b> this week`:'&nbsp;'}</small><small>${nm?(nm-x.pts)+' to '+nm:''}</small></div></div>`;}).join('');
  setTimeout(()=>{document.querySelectorAll('#lanes .trail').forEach(e=>{e.style.width=e.dataset.w+'%';});document.querySelectorAll('#lanes .runner').forEach(e=>{e.style.left=e.dataset.l+'%';});},80);
  const rg={};r.forEach(x=>{rg[x.region]=(rg[x.region]||0)+x.pts;});const rr=Object.keys(rg).map(k=>[k,rg[k]]).sort((a,b)=>b[1]-a[1]);const m3=Math.max(1,...rr.map(x=>x[1]));
- document.getElementById('regionBars').innerHTML=rr.map((x,i)=>`<div class="brow" style="${sel!=='All'&&META.region[sel]!==x[0]?'opacity:.3':''}"><div><b>${esc(x[0])}</b></div><div class="btrack"><div class="bfill" data-w="${100*x[1]/m3}" style="background:linear-gradient(90deg,${NT[i%NT.length]},${NT[(i+1)%NT.length]})"></div></div><div class="n big">${fmt(x[1])}</div></div>`).join('');
+ document.getElementById('regionBars').innerHTML=rr.map(x=>`<div class="brow" style="${sel!=='All'&&META.region[sel]!==x[0]?'opacity:.3':''}"><div>${esc(x[0])}</div><div class="btrack"><div class="bfill read" data-w="${100*x[1]/m3}"></div></div><div class="n big">${fmt(x[1])}</div></div>`).join('');
  grow('#regionBars');}
 
-function fame(){const r=repsOf(cur());const top=r.filter(x=>x.pts>0).slice(0,3);const H=[180,140,105],M=['&#129351;','&#129352;','&#129353;'];
- document.getElementById('podium').innerHTML=top.length?[1,0,2].filter(i=>top[i]).map(i=>{const x=top[i];
-  return `<div class="pod p${i+1}"><div class="av" style="background:${TCOL[x.team]}">${esc(initials(x.owner))}</div><div class="nm">${esc(x.owner)}</div><div class="tm">${esc(x.team)}</div>
-   <div class="badges">${badges(x).map(b=>`<span class="bdg">${b}</span>`).join('')}</div><div class="blk" data-h="${H[i]}">${M[i]} ${x.pts}<small>tickets</small></div></div>`;}).join('')
-  :'<p class="muted">The podium is empty &mdash; be the first to climb it!</p>';
+function stories(){const r=teamRows();const reps=Object.keys(REP).map(k=>REP[k]);const out=[];
+ let best=null;for(let i=0;i<r.length-1;i++){if(r[i].pts>0){const g=r[i].pts-r[i+1].pts;if(best===null||g<best.g)best={a:r[i],b:r[i+1],g:g};}}
+ out.push(['target','Closest race',best?(best.g===0?`<b>${esc(best.a.team)}</b> and <b>${esc(best.b.team)}</b> are tied at <b class="num">${best.a.pts}</b>.`:`<b>${esc(best.b.team)}</b> is just <b class="num">${best.g}</b> ticket${best.g>1?'s':''} behind <b>${esc(best.a.team)}</b>.`):'No tickets yet. The race is wide open.']);
+ const rw=reps.slice().sort((x,y)=>y.wk-x.wk||y.pts-x.pts)[0];
+ out.push(['spark','Rep of the week',rw&&rw.wk>0?`<b>${esc(rw.owner)}</b> (${esc(rw.team)}) added <b class="num">+${rw.wk}</b> tickets since ${PD}.`:'No new tickets this week. The first mover takes the spotlight.']);
+ const bd=ALL.filter(o=>o.pts>0).sort((x,y)=>y.ngs-x.ngs||y.pts-x.pts)[0];
+ out.push(['flowcell','Biggest bundle',bd?`<b>${esc(bd.owner)}</b> has <b class="num">${bd.ngs}</b> NGS products on ${esc(bd.name)}.`:'Bundle several NGS products on one opportunity to earn a ticket for each.']);
+ const cl=r.filter(x=>x.prank!=null&&x.prank-x.rank>0).sort((x,y)=>(y.prank-y.rank)-(x.prank-x.rank)||y.pts-x.pts)[0];
+ if(cl)out.push(['rocket','Biggest climber',`<b>${esc(cl.team)}</b> moved up <b class="num">${cl.prank-cl.rank}</b> place${cl.prank-cl.rank>1?'s':''} to #${cl.rank} since ${PD}.`]);
+ else{const nw=reps.filter(x=>x.isNew);out.push(['users','New on the board',nw.length?nw.map(x=>`<b>${esc(x.owner)}</b>`).join(', ')+` joined the leaderboard since ${PD}.`:'No new names this week. Who is next?']);}
+ document.getElementById('stories').innerHTML=out.map(s=>`<div class="story"><div class="k">${ic(s[0])}${s[1]}</div><p>${s[2]}</p></div>`).join('');}
+
+function fame(){const r=repsOf(cur());const top=r.filter(x=>x.pts>0).slice(0,3);const H=[170,130,100],PL=['1ST','2ND','3RD'];
+ document.getElementById('podium').innerHTML=top.length?[1,0,2].filter(i=>top[i]).map(i=>{const x=top[i];const g=REP[x.owner];
+  return `<div class="pod p${i+1}"><div class="av" style="--rc:${TCOL[x.team]}">${esc(initials(x.owner))}</div><div class="nm">${esc(x.owner)}${mv(g.prank,g.rank,g.isNew)}</div><div class="tm">${esc(x.team)}</div>
+   <div class="badges">${badges(x)}</div><div class="blk" data-h="${H[i]}"><div class="place">${PL[i]}</div><div class="pv">${x.pts}</div><div class="pl">tickets</div></div></div>`;}).join('')
+  :'<p class="muted">No one on the board yet.</p>';
  setTimeout(()=>{document.querySelectorAll('#podium .blk').forEach(e=>{e.style.height=e.dataset.h+'px';});},90);
- document.getElementById('repTable').innerHTML=`<tr><th>#</th><th>Rep</th><th>Team</th><th>Badges</th><th class="n">Tickets</th><th class="n">NGS opps</th><th class="n">Closed</th></tr>`+
-  (r.length?r.map((x,i)=>`<tr><td>${medal(i,x.pts)}</td><td><b>${esc(x.owner)}</b></td><td><span class="sw" style="background:${TCOL[x.team]}"></span>${esc(x.team)}</td>
-   <td>${badges(x).map(b=>`<span class="bdg">${b}</span>`).join(' ')}</td><td class="n big">${x.pts}</td><td class="n">${x.opps}</td><td class="n">${x.closed}</td></tr>`).join('')
-  :`<tr><td colspan="7" class="muted">No NGS opportunities yet for this team.</td></tr>`);}
+ document.getElementById('badgeLegend').innerHTML=Object.keys(BADGES).map(bdg).join(' ')+` <span class="muted" style="font-size:11.5px">&nbsp;Multiplexer = 3+ NGS products on one opportunity &middot; Hot streak = new tickets since ${PD} &middot; ranks are overall</span>`;
+ document.getElementById('repTable').innerHTML=`<tr><th>Rank</th><th>Move</th><th>Rep</th><th>Team</th><th>Badges</th><th class="n">Tickets</th><th class="n">This week</th><th class="n">NGS opps</th><th class="n">Closed</th></tr>`+
+  (r.length?r.map(x=>{const g=REP[x.owner];return `<tr><td>${medal(g.rank-1,x.pts)}</td><td>${mv(g.prank,g.rank,g.isNew)}</td><td><b>${esc(x.owner)}</b></td><td><span class="sw" style="background:${TCOL[x.team]}"></span>${esc(x.team)}</td>
+   <td>${badges(x)}</td><td class="n big">${x.pts}</td><td class="n num ${g.wk>0?'pos':''}">${g.wk>0?'+'+g.wk:'&ndash;'}</td><td class="n num">${x.opps}</td><td class="n num">${x.closed}</td></tr>`;}).join('')
+  :`<tr><td colspan="9" class="muted">No NGS opportunities yet for this team.</td></tr>`);}
 
 function tickets(){const total=sum(ALL,o=>o.pts),tot=Math.max(1,total);const r=repsOf(cur()).filter(x=>x.pts>0);
- document.getElementById('totTix').textContent=fmt(total);
- document.getElementById('tix').innerHTML=r.length?r.map(x=>{const c=100*x.pts/tot;
-  return `<div class="tk"><div class="l"><div class="nm">${esc(x.owner)}</div><div class="tm">${esc(x.team)}</div><div class="ch">Share of the drum: ${c.toFixed(1)}%</div><div class="bar"><i style="width:${c}%"></i></div></div><div class="r"><b>${x.pts}</b><span>tickets</span></div></div>`;}).join('')
-  :'<p class="muted">No tickets yet &mdash; get an NGS opportunity to Enter the Funnel!</p>';}
+ countUp(document.getElementById('totTix'),total);
+ document.getElementById('tix').innerHTML=r.length?r.map(x=>{const c=100*x.pts/tot;const g=REP[x.owner];
+  return `<div class="tk"><div class="l"><div class="lbl">QIAcast NGS Raffle &middot; 2026</div><div class="nm">${esc(x.owner)}</div><div class="tm">${esc(x.team)}</div>
+   <div class="meta"><div class="odds"><div class="ring" style="--p:${c.toFixed(1)}"><span>${c<10?c.toFixed(1):c.toFixed(0)}%</span></div><div class="ch">Odds of winning<span class="serial">No. NGS-26-${String(g.rank).padStart(3,'0')}</span></div></div><div class="code"></div></div></div>
+   <div class="r"><b>${x.pts}</b><span>tickets</span><em>DRAW ENTRY</em></div></div>`;}).join('')
+  :'<p class="muted">No tickets yet &mdash; move an NGS opportunity to Enter the Funnel to get on the board.</p>';}
 
 function weeks(){const s=new Date(META.start+'T00:00:00'),e=new Date(Math.min(AS,new Date(META.end+'T00:00:00')));const w=[];for(let d=new Date(s);d<=e;d.setDate(d.getDate()+7))w.push(new Date(d));return w;}
 function wk(ds,W){if(!ds)return -1;const d=dd(ds);let i=-1;W.forEach((w,j)=>{if(d>=w)i=j;});return i;}
@@ -220,80 +326,72 @@ function momentum(){const W=weeks();const shown=sel==='All'?META.teams:[sel];
  if(sel==='All')series=series.filter(s=>s.cum.length&&s.cum[s.cum.length-1]>0);
  const H=260,Wd=1060,pl=34,pb=28,mx=Math.max(1,...series.map(s=>Math.max(0,...s.cum)));
  const x=i=>pl+(W.length<2?0:i*(Wd-pl-14)/(W.length-1)),y=v=>H-pb-(v/mx)*(H-pb-12);
- let svg=`<svg viewBox="0 0 ${Wd} ${H}" width="100%" style="display:block">`;
- for(let g=0;g<=4;g++){const v=Math.round(mx*g/4);svg+=`<line x1="${pl}" x2="${Wd-14}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(255,255,255,.08)"/><text x="${pl-6}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="#aab3d6">${v}</text>`;}
- W.forEach((w,i)=>{if(i%2===0||W.length<10)svg+=`<text x="${x(i)}" y="${H-8}" font-size="11" text-anchor="middle" fill="#aab3d6">${w.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</text>`;});
- series.forEach(s=>{const c=TCOL[s.t];svg+=`<polyline fill="none" stroke="${c}" stroke-width="3.5" stroke-linejoin="round" style="filter:drop-shadow(0 0 5px ${c})" points="${s.cum.map((v,i)=>x(i)+','+y(v)).join(' ')}"/>`;
-  s.cum.forEach((v,i)=>{svg+=`<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="${c}"><title>${esc(s.t)}: ${v} tickets by week of ${W[i].toLocaleDateString('en-US')}</title></circle>`;});});
+ let svg=`<svg viewBox="0 0 ${Wd} ${H}" width="100%" style="display:block;font-family:IBM Plex Mono,monospace">`;
+ for(let g=0;g<=4;g++){const v=Math.round(mx*g/4);svg+=`<line x1="${pl}" x2="${Wd-14}" y1="${y(v)}" y2="${y(v)}" stroke="#dde5ef"/><text x="${pl-6}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="#5a6b82">${v}</text>`;}
+ W.forEach((w,i)=>{if(i%2===0||W.length<10)svg+=`<text x="${x(i)}" y="${H-8}" font-size="11" text-anchor="middle" fill="#5a6b82">${w.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</text>`;});
+ series.forEach(s=>{const c=TCOL[s.t];svg+=`<polyline fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round" points="${s.cum.map((v,i)=>x(i)+','+y(v)).join(' ')}"/>`;
+  s.cum.forEach((v,i)=>{svg+=`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" fill="#ffffff" stroke="${c}" stroke-width="2"><title>${esc(s.t)}: ${v} tickets by week of ${W[i].toLocaleDateString('en-US')}</title></circle>`;});});
  document.getElementById('chart').innerHTML=series.length?svg+'</svg>':'<p class="muted">No tickets yet.</p>';
- document.getElementById('chartLeg').innerHTML=series.map(s=>`<span class="chip" style="cursor:default"><span class="sw" style="background:${TCOL[s.t]}"></span>${esc(s.t)} &middot; ${s.cum[s.cum.length-1]||0}</span>`).join('');
+ document.getElementById('chartLeg').innerHTML=series.map(s=>`<span class="chip" style="cursor:default"><span class="sw" style="background:${TCOL[s.t]}"></span>${esc(s.t)} &middot; <span class="num">${s.cum[s.cum.length-1]||0}</span></span>`).join('');
  const tot=W.map((_,i)=>sum(series,s=>s.weekly[i]));const m2=Math.max(1,...tot);
- document.getElementById('weekBars').innerHTML=W.map((w,i)=>`<div class="brow"><div>Week of ${w.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div><div class="btrack"><div class="bfill" data-w="${100*tot[i]/m2}" style="background:linear-gradient(90deg,var(--P),var(--C))"></div></div><div class="n big">${tot[i]}</div></div>`).join('');
+ document.getElementById('weekBars').innerHTML=W.map((w,i)=>`<div class="brow"><div>Week of ${w.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div><div class="btrack"><div class="bfill read" data-w="${100*tot[i]/m2}"></div></div><div class="n big">${tot[i]}</div></div>`).join('');
  grow('#weekBars');
- const mv={};cur().forEach(o=>{let p=0;if(o.entry>0&&within7(o.created))p+=o.entry;if(o.close>0&&within7(o.closed_on))p+=o.close;if(p>0)mv[o.owner]=(mv[o.owner]||0)+p;});
- const ml=Object.keys(mv).map(k=>[k,mv[k]]).sort((a,b)=>b[1]-a[1]);
- document.getElementById('movers').innerHTML=ml.length?ml.map(m=>`<li><span>&#128293; <b>${esc(m[0])}</b></span><span class="big">+${m[1]}</span></li>`).join(''):'<li class="muted">No new tickets in the last 7 days &mdash; time to make a move!</li>';}
+ document.getElementById('moversSub').textContent=`Tickets earned since ${PD}`;
+ const owners=new Set(cur().map(o=>o.owner));const ml=Object.keys(REP).map(k=>REP[k]).filter(x=>owners.has(x.owner)&&x.wk>0).sort((a,b)=>b.wk-a.wk);
+ document.getElementById('movers').innerHTML=ml.length?ml.map(m=>`<li><span><b>${esc(m.owner)}</b> <span class="muted" style="font-size:12px">${esc(m.team)}</span>${mv(m.prank,m.rank,m.isNew)}</span><span class="big" style="color:var(--ok)">+${m.wk}</span></li>`).join(''):`<li class="muted">No new tickets since ${PD}.</li>`;}
 
 function opps(){const q=(document.getElementById('q').value||'').toLowerCase();
  const a=cur().filter(o=>!q||[o.name,o.account,o.owner,o.products,o.stage,o.team].join(' ').toLowerCase().indexOf(q)>=0);
  document.getElementById('oppTable').innerHTML=`<tr><th>Opportunity</th><th>Rep / team</th><th>Status</th><th class="n">NGS products</th><th class="n">Tickets</th><th>Created</th><th>Close date</th></tr>`+
-  (a.length?a.map(o=>`<tr><td><b>${esc(o.name)}</b><div class="muted" style="font-size:12px">${esc(o.account)}</div><div class="muted" style="font-size:11px">${esc(o.products)}</div></td>
+  (a.length?a.map(o=>`<tr><td><b style="color:var(--q-navy)">${esc(o.name)}</b><div class="muted" style="font-size:12px">${esc(o.account)}</div><div style="font-size:11px;color:#8a9bb0">${esc(o.products)}</div></td>
    <td>${esc(o.owner)}<div class="muted" style="font-size:12px">${esc(o.team)}</div></td><td>${pill(o.status)}<div class="muted" style="font-size:12px">${esc(o.stage)}</div></td>
-   <td class="n">${o.ngs}</td><td class="n big">${o.pts}<div class="muted" style="font:500 11px Inter,sans-serif">${o.entry} + ${o.close}</div></td><td>${o.created||''}</td><td>${o.close_date||''}</td></tr>`).join('')
+   <td class="n num">${o.ngs}</td><td class="n big">${o.pts}<div class="muted" style="font:500 11px Inter,sans-serif">${o.entry} + ${o.close}</div></td><td class="num">${o.created||''}</td><td class="num">${o.close_date||''}</td></tr>`).join('')
   :`<tr><td colspan="7" class="muted">No matching opportunities.</td></tr>`);}
 
-function powerups(){const a=cur();const n=Math.max(1,a.length);
+function quality(){const a=cur();const n=Math.max(1,a.length);
  document.getElementById('dqBars').innerHTML=META.checks.map(c=>{const p=a.length?Math.round(100*a.filter(o=>o.issues.indexOf(c)<0).length/n):0;
-  const col=p>=80?'var(--A)':p>=50?'var(--G)':'var(--T)';return `<div class="brow"><div title="${esc(c)}">${esc(c)}</div><div class="btrack"><div class="bfill" data-w="${p}" style="background:${col}"></div></div><div class="n big">${p}%</div></div>`;}).join('');
+  const col=p>=80?'var(--ok)':p>=50?'var(--warn)':'var(--bad)';return `<div class="brow"><div title="${esc(c)}">${esc(c)}</div><div class="btrack"><div class="bfill" data-w="${p}" style="background:${col}"></div></div><div class="n big">${p}%</div></div>`;}).join('');
  grow('#dqBars');
  const qw=a.filter(o=>o.status==='Not qualified');
- document.getElementById('quick').innerHTML=qw.length?`<table class="t"><tr><th>Opportunity</th><th>Rep</th><th class="n">Unlocks</th></tr>`+qw.map(o=>`<tr><td>${esc(o.name)}<div class="muted" style="font-size:11px">${esc(o.stage)}</div></td><td>${esc(o.owner)}</td><td class="n big" style="color:var(--G)">+${o.ngs}</td></tr>`).join('')+'</table>'
-  :'<p class="muted">Nothing waiting &mdash; every opportunity is in the funnel!</p>';
+ document.getElementById('quick').innerHTML=qw.length?`<table class="t"><tr><th>Opportunity</th><th>Rep</th><th class="n">Unlocks</th></tr>`+qw.map(o=>`<tr><td>${esc(o.name)}<div class="muted" style="font-size:11px">${esc(o.stage)}</div></td><td>${esc(o.owner)}</td><td class="n big" style="color:var(--q-blue)">+${o.ngs}</td></tr>`).join('')+'</table>'
+  :'<p class="muted">None &mdash; every opportunity is in the funnel.</p>';
  const g=a.filter(o=>o.issues.length).sort((x,y)=>y.issues.length-x.issues.length);
- document.getElementById('dqTable').innerHTML=`<tr><th>Opportunity</th><th>Rep</th><th>Stage</th><th>Power-ups to add</th></tr>`+
+ document.getElementById('dqTable').innerHTML=`<tr><th>Opportunity</th><th>Rep</th><th>Stage</th><th>Missing or to fix</th></tr>`+
   (g.length?g.map(o=>`<tr><td>${esc(o.name)}</td><td>${esc(o.owner)}</td><td>${esc(o.stage)}</td><td>${o.issues.map(i=>`<span class="iss">${esc(i)}</span>`).join('')}</td></tr>`).join('')
-  :`<tr><td colspan="4" class="muted">All opportunities are fully powered up!</td></tr>`);}
+  :`<tr><td colspan="4" class="muted">All opportunities meet the standards.</td></tr>`);}
 
 function rules(){const R=[
- ['&#127903;','Enter the funnel','+'+META.pts_line+' ticket','For every NGS (UNGS) product on an opportunity at Enter the Funnel or later.'],
- ['&#127942;','Close the deal','+'+META.pts_close+' tickets','Flat bonus when the opportunity closes: '+META.closed_stages.join(', ')+'.'],
- ['&#129516;','Stack your products','Multiplex it','Put several NGS products on one opportunity &mdash; each product is a ticket.'],
- ['&#128269;','Qualify first','Universe = 0','Universe and Above the Funnel opportunities do not count. Vet the lead and move it to Enter the Funnel.'],
- ['&#128101;','Team prize','~$250 each','Every member of the winning team receives a prize worth about $250.'],
- ['&#127873;','Raffle','Coming soon','More tickets = more chances to win. Prize details to be announced.'],
- ['&#128640;','Any source counts','Trade shows too','Leads from webinars, campaigns, FAS or another rep all count &mdash; once they are in your name in Salesforce.'],
- ['&#9878;','Fine print','Commercial Ops decides','Opportunities created on or after Sept 1, 2026. If it is not in Salesforce, it does not exist. All decisions are final.']];
- document.getElementById('rules').innerHTML=R.map(r=>`<div class="rule"><div class="ic">${r[0]}</div><h3>${r[1]}</h3><div class="pts">${r[2]}</div><p>${r[3]}</p></div>`).join('');}
+ ['flowcell','Enter the funnel','+'+META.pts_line+' ticket','For every NGS (UNGS) product on an opportunity at Enter the Funnel or later.'],
+ ['trophy','Close the deal','+'+META.pts_close+' tickets','Flat bonus when the opportunity closes: '+META.closed_stages.join(', ')+'.'],
+ ['dna','Bundle products','1 per product','Put several NGS products on one opportunity; each product earns a ticket.'],
+ ['target','Qualify first','0 in Universe','Universe and Above the Funnel do not count. Vet the lead and move it to Enter the Funnel.'],
+ ['users','Team prize','~$250 each','Every member of the winning team receives a prize worth about $250.'],
+ ['gift','Raffle','To be announced','More tickets, more chances to win. Prize details coming soon.'],
+ ['route','Any lead source','All count','Trade shows, webinars, campaigns, FAS or another rep: all count once the opportunity is yours in Salesforce.'],
+ ['book','Fine print','Commercial Ops','Opportunities created on or after Sept 1, 2026. If it is not in Salesforce, it does not exist. All decisions are final.']];
+ document.getElementById('rules').innerHTML=R.map(r=>`<div class="rule"><div class="k">${ic(r[0])}${r[1]}</div><div class="pts">${r[2]}</div><p>${r[3]}</p></div>`).join('');}
 
-function ticker(){const ev=[];ALL.forEach(o=>{if(o.entry>0&&o.created)ev.push({d:o.created,h:`&#127903; <b>${esc(o.owner)}</b> entered ${esc(o.name)} &middot; +${o.entry}`});
-  if(o.close>0&&o.closed_on)ev.push({d:o.closed_on,h:`&#127942; <b>${esc(o.owner)}</b> closed ${esc(o.name)} &middot; +${o.close}`});});
+function ticker(){const ev=[];ALL.forEach(o=>{if(o.entry>0&&o.created)ev.push({d:o.created,c:'#9fdcf5',h:`<b>${esc(o.owner)}</b> entered ${esc(o.name)} <span class="plus">+${o.entry}</span>`});
+  if(o.close>0&&o.closed_on)ev.push({d:o.closed_on,c:'#f2b705',h:`<b>${esc(o.owner)}</b> closed ${esc(o.name)} <span class="plus">+${o.close}</span>`});});
  ev.sort((a,b)=>a.d<b.d?1:a.d>b.d?-1:0);
- const items=ev.slice(0,14).map(e=>`<span class="ev">${e.h}</span>`).join('')||'<span class="ev">The race is on &mdash; enter your first NGS opportunity!</span>';
+ const items=ev.slice(0,14).map(e=>`<span class="ev"><span class="dot" style="background:${e.c}"></span>${e.h}</span>`).join('')||'<span class="ev">The contest is on &mdash; enter your first NGS opportunity.</span>';
  document.getElementById('ticker').innerHTML=items+items;}
 
-function helix(){const W=1400,H=200,amp=60,per=350,NC={A:'#22e39a',C:'#3fa9ff',G:'#ffc93c',T:'#ff5d73'},CP={A:'T',T:'A',C:'G',G:'C'},B='ACGT';
+function helix(){const W=1400,H=200,amp=58,per=350,NC={A:'#b9e39b',C:'#ffffff',G:'#ffe08a',T:'#9fdcf5'},CP={A:'T',T:'A',C:'G',G:'C'},B='ACGT';
  let seed=11;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};let p1='',p2='',g='';
  for(let x=0;x<=W;x+=5){const a=amp*Math.sin(x/per*2*Math.PI);p1+=(x?'L':'M')+x+','+(H/2+a).toFixed(1);p2+=(x?'L':'M')+x+','+(H/2-a).toFixed(1);}
  const bases=[];for(let k=0;k<20;k++)bases.push(B[Math.floor(rnd()*4)]);
  for(let x=12,k=0;x<W;x+=35,k++){const a=amp*Math.sin(x/per*2*Math.PI),b=bases[k%20];
-  g+=`<line x1="${x}" y1="${H/2+a}" x2="${x}" y2="${H/2}" stroke="${NC[b]}" stroke-width="7" stroke-linecap="round"/><line x1="${x}" y1="${H/2}" x2="${x}" y2="${H/2-a}" stroke="${NC[CP[b]]}" stroke-width="7" stroke-linecap="round"/>`;}
- document.getElementById('helix').innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${g}<path d="${p1}" fill="none" stroke="#ffffff" stroke-opacity=".85" stroke-width="5"/><path d="${p2}" fill="none" stroke="#c9f7ff" stroke-opacity=".85" stroke-width="5"/></svg>`;}
+  g+=`<line x1="${x}" y1="${H/2+a}" x2="${x}" y2="${H/2}" stroke="${NC[b]}" stroke-width="4" stroke-linecap="round"/><line x1="${x}" y1="${H/2}" x2="${x}" y2="${H/2-a}" stroke="${NC[CP[b]]}" stroke-width="4" stroke-linecap="round"/>`;}
+ document.getElementById('helix').innerHTML=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${g}<path d="${p1}" fill="none" stroke="#ffffff" stroke-width="3"/><path d="${p2}" fill="none" stroke="#9fdcf5" stroke-width="3"/></svg>`;}
 
-function confetti(){if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
- const c=document.getElementById('confetti'),x=c.getContext('2d');c.width=window.innerWidth;c.height=window.innerHeight;const P=[];
- for(let i=0;i<170;i++)P.push({x:Math.random()*c.width,y:-20-Math.random()*c.height*.6,vx:-1.5+Math.random()*3,vy:2+Math.random()*3.5,r:3+Math.random()*5,c:NT[i%NT.length],a:Math.random()*6.28,s:-.2+Math.random()*.4,ch:'ACGT'[i%4]});
- const t0=performance.now();
- function f(t){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=p.s;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;
-   if(p.r>6){x.font='bold 15px sans-serif';x.fillText(p.ch,0,0);}else x.fillRect(-p.r,-p.r/2,p.r*2,p.r);x.restore();});
-  if(t-t0<4500)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height);}
- requestAnimationFrame(f);}
-
-function render(){chips();kpis();race();fame();tickets();momentum();opps();powerups();}
+function render(){chips();kpis();race();stories();fame();tickets();momentum();opps();quality();decorate();}
 document.getElementById('asof').textContent=AS.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+document.getElementById('foot').innerHTML=`Source: Salesforce &middot; NGS = product budget line UNGS &middot; Movement compared with ${PD}${PREV.source==='reconstructed'?' (estimated from opportunity dates)':''} &middot; Points tracked by Daniel Olardo; all decisions are final.`;
 countUp(document.getElementById('days'),Math.max(0,Math.ceil((new Date(META.end_excl+'T00:00:00')-new Date())/864e5)));
 document.querySelectorAll('.tab').forEach(b=>{b.onclick=()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));b.classList.add('on');
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById('p'+b.dataset.p).classList.add('on');render();};});
 document.getElementById('q').oninput=opps;
-helix(); ticker(); rules(); render(); confetti();
+helix(); ticker(); scoreboard(); rules(); render();
 
 </script></body></html>
